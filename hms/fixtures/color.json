@@ -1,0 +1,22 @@
+[
+ {
+  "color": "#B2BEB5",
+  "doctype": "Color",
+  "name": "Grey"
+ },
+ {
+  "color": "#7B3F00",
+  "doctype": "Color",
+  "name": "Bay"
+ },
+ {
+  "color": "#000000",
+  "doctype": "Color",
+  "name": "Black"
+ },
+ {
+  "color": "#954535",
+  "doctype": "Color",
+  "name": "Chestnut"
+ }
+]

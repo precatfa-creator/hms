@@ -1,0 +1,338 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-07-26 10:00:00.000000",
+ "default_print_format": "Horse Transfer of Ownership Form",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "horse_tab",
+  "naming_series",
+  "sec_horse",
+  "horse",
+  "horse_name_ar",
+  "horse_name_en",
+  "date_of_birth",
+  "place_of_birth",
+  "col_horse",
+  "gender",
+  "color",
+  "origin",
+  "microchip_no",
+  "ueln_no",
+  "sec_pedigree",
+  "sire_name_en",
+  "sire_registration_no",
+  "col_pedigree",
+  "dam_name_en",
+  "dam_registration_no",
+  "parties_tab",
+  "sec_transferor",
+  "current_owner_name_ar",
+  "current_owner_name_en",
+  "current_owner_national_id",
+  "current_owner_address",
+  "current_owner_city",
+  "current_owner_phone",
+  "current_ownership_date",
+  "col_transferee",
+  "new_owner_name_ar",
+  "new_owner_name_en",
+  "new_owner_national_id",
+  "new_owner_address",
+  "new_owner_city",
+  "new_owner_phone",
+  "new_ownership_date",
+  "sec_legal",
+  "legal_contract_officer",
+  "col_legal",
+  "endorsement_date"
+ ],
+ "fields": [
+  {
+   "fieldname": "horse_tab",
+   "fieldtype": "Tab Break",
+   "label": "Horse Information"
+  },
+  {
+   "default": "OCF-.YYYY.-.#####",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Series",
+   "no_copy": 1,
+   "options": "OCF-.YYYY.-.#####\n",
+   "print_hide": 1,
+   "reqd": 1,
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "sec_horse",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "horse",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Horse",
+   "options": "Horse",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "horse.name_ar",
+   "fieldname": "horse_name_ar",
+   "fieldtype": "Data",
+   "label": "Horse's Name (Arabic)",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "horse.name_en",
+   "fieldname": "horse_name_en",
+   "fieldtype": "Data",
+   "label": "Horse's Name (English)",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "horse.date_of_birth",
+   "fieldname": "date_of_birth",
+   "fieldtype": "Date",
+   "label": "Date of Birth",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "horse.place_of_birth",
+   "fieldname": "place_of_birth",
+   "fieldtype": "Data",
+   "label": "Place of Birth",
+   "read_only": 1
+  },
+  {
+   "fieldname": "col_horse",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "horse.gender",
+   "fieldname": "gender",
+   "fieldtype": "Data",
+   "label": "Sex",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "horse.color",
+   "fieldname": "color",
+   "fieldtype": "Link",
+   "label": "Color",
+   "options": "Color",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "horse.origin",
+   "fieldname": "origin",
+   "fieldtype": "Data",
+   "label": "Country of Origin",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "horse.microchip_no",
+   "fieldname": "microchip_no",
+   "fieldtype": "Data",
+   "label": "Microchip No",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "horse.ueln_no",
+   "fieldname": "ueln_no",
+   "fieldtype": "Data",
+   "label": "UELN No",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sec_pedigree",
+   "fieldtype": "Section Break",
+   "label": "Pedigree"
+  },
+  {
+   "fetch_from": "horse.sire_name_en",
+   "fieldname": "sire_name_en",
+   "fieldtype": "Data",
+   "label": "Sire's Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "horse.sire_registration_no",
+   "fieldname": "sire_registration_no",
+   "fieldtype": "Data",
+   "label": "Sire Registration No",
+   "read_only": 1
+  },
+  {
+   "fieldname": "col_pedigree",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "horse.dam_name_en",
+   "fieldname": "dam_name_en",
+   "fieldtype": "Data",
+   "label": "Dam's Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "horse.dam_registration_no",
+   "fieldname": "dam_registration_no",
+   "fieldtype": "Data",
+   "label": "Dam Registration No",
+   "read_only": 1
+  },
+  {
+   "fieldname": "parties_tab",
+   "fieldtype": "Tab Break",
+   "label": "Parties"
+  },
+  {
+   "fieldname": "sec_transferor",
+   "fieldtype": "Section Break",
+   "label": "Transferor Information (Current Owner)"
+  },
+  {
+   "fetch_from": "horse.owner_name_ar",
+   "fieldname": "current_owner_name_ar",
+   "fieldtype": "Data",
+   "label": "Full Name (Arabic)",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "horse.owner_name_en",
+   "fieldname": "current_owner_name_en",
+   "fieldtype": "Data",
+   "label": "Full Name (English)",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "horse.owner_national_id",
+   "fieldname": "current_owner_national_id",
+   "fieldtype": "Data",
+   "label": "National ID / Passport No",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "horse.owner_address",
+   "fieldname": "current_owner_address",
+   "fieldtype": "Small Text",
+   "label": "Address",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "horse.owner_city",
+   "fieldname": "current_owner_city",
+   "fieldtype": "Data",
+   "label": "City",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "horse.owner_phone",
+   "fieldname": "current_owner_phone",
+   "fieldtype": "Data",
+   "label": "Phone No",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "horse.owner_since",
+   "fieldname": "current_ownership_date",
+   "fieldtype": "Date",
+   "label": "Horse Ownership Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "col_transferee",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "new_owner_name_ar",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Full Name (Arabic)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "new_owner_name_en",
+   "fieldtype": "Data",
+   "label": "Full Name (English)"
+  },
+  {
+   "fieldname": "new_owner_national_id",
+   "fieldtype": "Data",
+   "label": "National ID / Passport No"
+  },
+  {
+   "fieldname": "new_owner_address",
+   "fieldtype": "Small Text",
+   "label": "Address"
+  },
+  {
+   "fieldname": "new_owner_city",
+   "fieldtype": "Data",
+   "label": "City"
+  },
+  {
+   "fieldname": "new_owner_phone",
+   "fieldtype": "Data",
+   "label": "Phone No"
+  },
+  {
+   "fieldname": "new_ownership_date",
+   "fieldtype": "Date",
+   "label": "Horse Ownership Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "sec_legal",
+   "fieldtype": "Section Break",
+   "label": "Legal"
+  },
+  {
+   "fieldname": "legal_contract_officer",
+   "fieldtype": "Data",
+   "label": "Legal Contract Officer's Name"
+  },
+  {
+   "fieldname": "col_legal",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "endorsement_date",
+   "fieldtype": "Date",
+   "label": "Endorsement Date"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-26 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "HMS",
+ "name": "Owner Change Form",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "search_fields": "horse,new_owner_name_en",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

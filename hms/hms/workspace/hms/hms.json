@@ -1,0 +1,242 @@
+{
+ "charts": [
+  {
+   "chart_name": "Horse Registrations",
+   "label": "Horse Registrations"
+  },
+  {
+   "chart_name": "Horses by Documents Status",
+   "label": "Horses by Documents Status"
+  },
+  {
+   "chart_name": "Horses by Color",
+   "label": "Horses by Color"
+  },
+  {
+   "chart_name": "Horses by Origin",
+   "label": "Horses by Origin"
+  },
+  {
+   "chart_name": "Horses by Sex",
+   "label": "Horses by Sex"
+  },
+  {
+   "chart_name": "Ownership Transfers",
+   "label": "Ownership Transfers"
+  },
+  {
+   "chart_name": "Name Changes",
+   "label": "Name Changes"
+  }
+ ],
+ "content": "[{\"id\": \"hms001\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Shortcuts</b></span>\", \"col\": 12}}, {\"id\": \"hms002\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Horse\", \"col\": 3}}, {\"id\": \"hms003\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Horse Owner\", \"col\": 3}}, {\"id\": \"hms004\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Registration Form for Local Horses\", \"col\": 3}}, {\"id\": \"hms005\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Owner Change Form\", \"col\": 3}}, {\"id\": \"hms006\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Name Change Form\", \"col\": 3}}, {\"id\": \"hms007\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"hms008\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Overview</b></span>\", \"col\": 12}}, {\"id\": \"hms009\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Total Horses\", \"col\": 3}}, {\"id\": \"hms010\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Living Horses\", \"col\": 3}}, {\"id\": \"hms011\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Documents Completed\", \"col\": 3}}, {\"id\": \"hms012\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Documents Incomplete\", \"col\": 3}}, {\"id\": \"hms013\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Imported Horses\", \"col\": 3}}, {\"id\": \"hms014\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Registered Owners\", \"col\": 3}}, {\"id\": \"hms015\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Registration Forms\", \"col\": 3}}, {\"id\": \"hms016\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Owner Change Forms\", \"col\": 3}}, {\"id\": \"hms017\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Name Change Forms\", \"col\": 3}}, {\"id\": \"hms018\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"hms019\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Charts</b></span>\", \"col\": 12}}, {\"id\": \"hms020\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Horse Registrations\", \"col\": 12}}, {\"id\": \"hms021\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Horses by Documents Status\", \"col\": 6}}, {\"id\": \"hms022\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Horses by Color\", \"col\": 6}}, {\"id\": \"hms023\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Horses by Origin\", \"col\": 6}}, {\"id\": \"hms024\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Horses by Sex\", \"col\": 6}}, {\"id\": \"hms025\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Ownership Transfers\", \"col\": 6}}, {\"id\": \"hms026\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Name Changes\", \"col\": 6}}, {\"id\": \"hms027\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"hms028\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Masters & Forms</b></span>\", \"col\": 12}}, {\"id\": \"hms029\", \"type\": \"card\", \"data\": {\"card_name\": \"Registry\", \"col\": 4}}, {\"id\": \"hms030\", \"type\": \"card\", \"data\": {\"card_name\": \"Forms\", \"col\": 4}}, {\"id\": \"hms031\", \"type\": \"card\", \"data\": {\"card_name\": \"Setup\", \"col\": 4}}]",
+ "creation": "2026-07-26 19:13:16.193898",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "users",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "HMS",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Registry",
+   "link_count": 2,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Horse",
+   "link_count": 0,
+   "link_to": "Horse",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Horse Owner",
+   "link_count": 0,
+   "link_to": "Horse Owner",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Forms",
+   "link_count": 3,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Registration Form for Local Horses",
+   "link_count": 0,
+   "link_to": "Registration Form for Local Horses",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Owner Change Form",
+   "link_count": 0,
+   "link_to": "Owner Change Form",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Name Change Form",
+   "link_count": 0,
+   "link_to": "Name Change Form",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Setup",
+   "link_count": 2,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Print Format",
+   "link_count": 0,
+   "link_to": "Print Format",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "HMS Settings",
+   "link_count": 0,
+   "link_to": "HMS Settings",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-08-16 18:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "HMS",
+ "name": "HMS",
+ "number_cards": [
+  {
+   "label": "Total Horses",
+   "number_card_name": "Total Horses"
+  },
+  {
+   "label": "Living Horses",
+   "number_card_name": "Living Horses"
+  },
+  {
+   "label": "Documents Completed",
+   "number_card_name": "Documents Completed"
+  },
+  {
+   "label": "Documents Incomplete",
+   "number_card_name": "Documents Incomplete"
+  },
+  {
+   "label": "Imported Horses",
+   "number_card_name": "Imported Horses"
+  },
+  {
+   "label": "Registered Owners",
+   "number_card_name": "Registered Owners"
+  },
+  {
+   "label": "Registration Forms",
+   "number_card_name": "Registration Forms"
+  },
+  {
+   "label": "Owner Change Forms",
+   "number_card_name": "Owner Change Forms"
+  },
+  {
+   "label": "Name Change Forms",
+   "number_card_name": "Name Change Forms"
+  }
+ ],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 1.0,
+ "shortcuts": [
+  {
+   "color": "Blue",
+   "doc_view": "List",
+   "format": "{} Alive",
+   "label": "Horse",
+   "link_to": "Horse",
+   "stats_filter": "{\"life_status\":[\"=\",\"Alive\"]}",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Horse Owner",
+   "link_to": "Horse Owner",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "doc_view": "List",
+   "label": "Registration Form for Local Horses",
+   "link_to": "Registration Form for Local Horses",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "label": "Owner Change Form",
+   "link_to": "Owner Change Form",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "label": "Name Change Form",
+   "link_to": "Name Change Form",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "",
+   "label": "HMS Settings",
+   "link_to": "HMS Settings",
+   "type": "DocType"
+  }
+ ],
+ "title": "HMS"
+}

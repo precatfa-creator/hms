@@ -1,0 +1,97 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-08-16 10:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 0,
+ "engine": "InnoDB",
+ "field_order": [
+  "synced_on",
+  "synced_by",
+  "created_count",
+  "updated_count",
+  "skipped_count",
+  "duration",
+  "outcome",
+  "message"
+ ],
+ "fields": [
+  {
+   "columns": 2,
+   "fieldname": "synced_on",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Synced On",
+   "read_only": 1
+  },
+  {
+   "columns": 2,
+   "fieldname": "synced_by",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Synced By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "created_count",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Created",
+   "read_only": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "updated_count",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Updated",
+   "read_only": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "skipped_count",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Skipped",
+   "read_only": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "duration",
+   "fieldtype": "Float",
+   "label": "Seconds",
+   "precision": "2",
+   "read_only": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "outcome",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Outcome",
+   "options": "Success\nPartial\nFailed",
+   "read_only": 1
+  },
+  {
+   "fieldname": "message",
+   "fieldtype": "Small Text",
+   "label": "Message",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-08-16 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "HMS",
+ "name": "Studbook Sync Log",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

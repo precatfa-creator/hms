@@ -1,0 +1,785 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2026-07-26 10:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "identity_tab",
+  "naming_series",
+  "sec_names",
+  "name_ar",
+  "name_en",
+  "ueln_no",
+  "microchip_no",
+  "col_identity",
+  "origin",
+  "gender",
+  "registration_form",
+  "sec_description",
+  "color",
+  "breed",
+  "date_of_birth",
+  "place_of_birth",
+  "col_status",
+  "current_location",
+  "life_status",
+  "death_date",
+  "notification_date",
+  "pedigree_tab",
+  "sec_sire",
+  "sire_name_ar",
+  "sire_name_en",
+  "sire_registration_no",
+  "col_sire_origin",
+  "sire_origin",
+  "sire_date_of_birth",
+  "sire_place_of_birth",
+  "col_sire_description",
+  "sire_color",
+  "sire_breed",
+  "sire_microchip_no",
+  "sec_dam",
+  "dam_name_ar",
+  "dam_name_en",
+  "dam_registration_no",
+  "col_dam_origin",
+  "dam_origin",
+  "dam_date_of_birth",
+  "dam_place_of_birth",
+  "col_dam_description",
+  "dam_color",
+  "dam_breed",
+  "dam_microchip_no",
+  "ownership_tab",
+  "sec_owner",
+  "owner_name_ar",
+  "owner_name_en",
+  "owner_national_id",
+  "col_owner_contact",
+  "owner_phone",
+  "owner_city",
+  "owner_address",
+  "owner_since",
+  "sec_breeder",
+  "breeder_name_ar",
+  "breeder_name_en",
+  "breeder_national_id",
+  "col_breeder_contact",
+  "breeder_phone",
+  "breeder_city",
+  "breeder_address",
+  "sec_history",
+  "ownership_history",
+  "name_history",
+  "documents_tab",
+  "status",
+  "sec_doc_registration_form",
+  "doc_registration_form",
+  "col_doc_registration_form",
+  "doc_registration_date",
+  "sec_doc_breeding_certificate",
+  "doc_breeding_certificate",
+  "col_doc_breeding_certificate",
+  "doc_breeding_certificate_no",
+  "sec_doc_dna_card",
+  "doc_dna_card",
+  "col_doc_dna_card",
+  "doc_dna_status",
+  "sec_doc_marking",
+  "doc_marking",
+  "col_doc_marking",
+  "doc_marking_by",
+  "doc_marking_date",
+  "sec_doc_owner_id",
+  "doc_owner_id",
+  "col_doc_owner_id",
+  "doc_owner_id_date",
+  "sec_doc_passport",
+  "doc_passport",
+  "col_doc_passport",
+  "doc_passport_no",
+  "sec_doc_export_certificate",
+  "doc_export_certificate",
+  "col_doc_export_certificate",
+  "doc_export_certificate_no",
+  "doc_export_date",
+  "sec_doc_covering_certificate",
+  "doc_covering_certificate",
+  "col_doc_covering_certificate",
+  "doc_covering_season",
+  "sec_doc_covering_agreement",
+  "doc_covering_agreement",
+  "col_doc_covering_agreement",
+  "doc_covering_agreement_season",
+  "sec_doc_owner_change_form",
+  "doc_owner_change_form",
+  "col_doc_owner_change_form",
+  "doc_owner_change_date",
+  "sec_doc_death_form",
+  "doc_death_form",
+  "col_doc_death_form",
+  "doc_death_event_date",
+  "sec_doc_others",
+  "doc_others",
+  "col_doc_others",
+  "doc_others_note"
+ ],
+ "fields": [
+  {
+   "fieldname": "identity_tab",
+   "fieldtype": "Tab Break",
+   "label": "Identity"
+  },
+  {
+   "default": "LY-.YYYY.-.#####",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Series",
+   "no_copy": 1,
+   "options": "LY-.YYYY.-.#####\n",
+   "print_hide": 1,
+   "reqd": 1,
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "sec_names",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "name_ar",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Name (Arabic)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "name_en",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Name (English)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "ueln_no",
+   "fieldtype": "Data",
+   "label": "UELN No"
+  },
+  {
+   "fieldname": "microchip_no",
+   "fieldtype": "Data",
+   "label": "Microchip No"
+  },
+  {
+   "fieldname": "col_identity",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Local",
+   "fieldname": "origin",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Country of Origin",
+   "options": "Local\nImported",
+   "reqd": 1
+  },
+  {
+   "fieldname": "gender",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Sex",
+   "options": "\nMale\nFemale\nGelding",
+   "reqd": 1
+  },
+  {
+   "fieldname": "registration_form",
+   "fieldtype": "Link",
+   "label": "Registration Form",
+   "no_copy": 1,
+   "options": "Registration Form for Local Horses",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sec_description",
+   "fieldtype": "Section Break",
+   "label": "Description"
+  },
+  {
+   "fieldname": "color",
+   "fieldtype": "Link",
+   "label": "Color",
+   "options": "Color"
+  },
+  {
+   "fieldname": "breed",
+   "fieldtype": "Data",
+   "label": "Breed"
+  },
+  {
+   "fieldname": "date_of_birth",
+   "fieldtype": "Date",
+   "label": "Date of Birth"
+  },
+  {
+   "fieldname": "place_of_birth",
+   "fieldtype": "Data",
+   "label": "Place of Birth"
+  },
+  {
+   "fieldname": "col_status",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "current_location",
+   "fieldtype": "Data",
+   "label": "Current Location"
+  },
+  {
+   "default": "Alive",
+   "fieldname": "life_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status of Life",
+   "options": "Alive\nDeceased"
+  },
+  {
+   "depends_on": "eval:doc.life_status==\"Deceased\"",
+   "fieldname": "death_date",
+   "fieldtype": "Date",
+   "label": "Date of Death"
+  },
+  {
+   "fieldname": "notification_date",
+   "fieldtype": "Date",
+   "label": "Notification Date"
+  },
+  {
+   "fieldname": "pedigree_tab",
+   "fieldtype": "Tab Break",
+   "label": "Pedigree"
+  },
+  {
+   "fieldname": "sec_sire",
+   "fieldtype": "Section Break",
+   "label": "Sire's Data"
+  },
+  {
+   "fieldname": "sire_name_ar",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Sire's Name (Arabic)"
+  },
+  {
+   "fieldname": "sire_name_en",
+   "fieldtype": "Data",
+   "label": "Sire's Name (English)"
+  },
+  {
+   "fieldname": "sire_registration_no",
+   "fieldtype": "Data",
+   "label": "Registration No"
+  },
+  {
+   "fieldname": "col_sire_origin",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sire_origin",
+   "fieldtype": "Select",
+   "label": "Country of Origin",
+   "options": "\nLocal\nImported"
+  },
+  {
+   "fieldname": "sire_date_of_birth",
+   "fieldtype": "Date",
+   "label": "Date of Birth"
+  },
+  {
+   "fieldname": "sire_place_of_birth",
+   "fieldtype": "Data",
+   "label": "Place of Birth"
+  },
+  {
+   "fieldname": "col_sire_description",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sire_color",
+   "fieldtype": "Data",
+   "label": "Color"
+  },
+  {
+   "fieldname": "sire_breed",
+   "fieldtype": "Data",
+   "label": "Breed"
+  },
+  {
+   "fieldname": "sire_microchip_no",
+   "fieldtype": "Data",
+   "label": "Microchip No"
+  },
+  {
+   "fieldname": "sec_dam",
+   "fieldtype": "Section Break",
+   "label": "Dam's Data"
+  },
+  {
+   "fieldname": "dam_name_ar",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Dam's Name (Arabic)"
+  },
+  {
+   "fieldname": "dam_name_en",
+   "fieldtype": "Data",
+   "label": "Dam's Name (English)"
+  },
+  {
+   "fieldname": "dam_registration_no",
+   "fieldtype": "Data",
+   "label": "Registration No"
+  },
+  {
+   "fieldname": "col_dam_origin",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "dam_origin",
+   "fieldtype": "Select",
+   "label": "Country of Origin",
+   "options": "\nLocal\nImported"
+  },
+  {
+   "fieldname": "dam_date_of_birth",
+   "fieldtype": "Date",
+   "label": "Date of Birth"
+  },
+  {
+   "fieldname": "dam_place_of_birth",
+   "fieldtype": "Data",
+   "label": "Place of Birth"
+  },
+  {
+   "fieldname": "col_dam_description",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "dam_color",
+   "fieldtype": "Data",
+   "label": "Color"
+  },
+  {
+   "fieldname": "dam_breed",
+   "fieldtype": "Data",
+   "label": "Breed"
+  },
+  {
+   "fieldname": "dam_microchip_no",
+   "fieldtype": "Data",
+   "label": "Microchip No"
+  },
+  {
+   "fieldname": "ownership_tab",
+   "fieldtype": "Tab Break",
+   "label": "Ownership"
+  },
+  {
+   "fieldname": "sec_owner",
+   "fieldtype": "Section Break",
+   "label": "Owner"
+  },
+  {
+   "fieldname": "owner_name_ar",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Owner Name (Arabic)"
+  },
+  {
+   "fieldname": "owner_name_en",
+   "fieldtype": "Data",
+   "label": "Owner Name (English)"
+  },
+  {
+   "fieldname": "owner_national_id",
+   "fieldtype": "Data",
+   "label": "Owner National ID / Passport No"
+  },
+  {
+   "fieldname": "col_owner_contact",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "owner_phone",
+   "fieldtype": "Data",
+   "label": "Owner Phone No"
+  },
+  {
+   "fieldname": "owner_city",
+   "fieldtype": "Data",
+   "label": "Owner City"
+  },
+  {
+   "fieldname": "owner_address",
+   "fieldtype": "Small Text",
+   "label": "Owner Address"
+  },
+  {
+   "fieldname": "owner_since",
+   "fieldtype": "Date",
+   "label": "Owner Since"
+  },
+  {
+   "fieldname": "sec_breeder",
+   "fieldtype": "Section Break",
+   "label": "Breeder"
+  },
+  {
+   "fieldname": "breeder_name_ar",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Breeder Name (Arabic)"
+  },
+  {
+   "fieldname": "breeder_name_en",
+   "fieldtype": "Data",
+   "label": "Breeder Name (English)"
+  },
+  {
+   "fieldname": "breeder_national_id",
+   "fieldtype": "Data",
+   "label": "Breeder National ID / Passport No"
+  },
+  {
+   "fieldname": "col_breeder_contact",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "breeder_phone",
+   "fieldtype": "Data",
+   "label": "Breeder Phone No"
+  },
+  {
+   "fieldname": "breeder_city",
+   "fieldtype": "Data",
+   "label": "Breeder City"
+  },
+  {
+   "fieldname": "breeder_address",
+   "fieldtype": "Small Text",
+   "label": "Breeder Address"
+  },
+  {
+   "fieldname": "sec_history",
+   "fieldtype": "Section Break",
+   "label": "History"
+  },
+  {
+   "fieldname": "ownership_history",
+   "fieldtype": "Table",
+   "label": "Ownership History",
+   "options": "Horse Ownership Log",
+   "read_only": 1
+  },
+  {
+   "fieldname": "name_history",
+   "fieldtype": "Table",
+   "label": "Name History",
+   "options": "Horse Name Log",
+   "read_only": 1
+  },
+  {
+   "fieldname": "documents_tab",
+   "fieldtype": "Tab Break",
+   "label": "Documents"
+  },
+  {
+   "default": "Not Yet",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "no_copy": 1,
+   "options": "Not Yet\nPartially Completed\nCompleted",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sec_doc_registration_form",
+   "fieldtype": "Section Break",
+   "label": "Registration Form"
+  },
+  {
+   "fieldname": "doc_registration_form",
+   "fieldtype": "Attach",
+   "label": "Registration Form"
+  },
+  {
+   "fieldname": "col_doc_registration_form",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "doc_registration_date",
+   "fieldtype": "Date",
+   "label": "Date of Registration"
+  },
+  {
+   "depends_on": "eval:doc.origin==\"Local\"",
+   "fieldname": "sec_doc_breeding_certificate",
+   "fieldtype": "Section Break",
+   "label": "Breeding Certificate"
+  },
+  {
+   "fieldname": "doc_breeding_certificate",
+   "fieldtype": "Attach",
+   "label": "Breeding Certificate"
+  },
+  {
+   "fieldname": "col_doc_breeding_certificate",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "doc_breeding_certificate_no",
+   "fieldtype": "Data",
+   "label": "Certificate Number"
+  },
+  {
+   "fieldname": "sec_doc_dna_card",
+   "fieldtype": "Section Break",
+   "label": "DNA Result / Card"
+  },
+  {
+   "fieldname": "doc_dna_card",
+   "fieldtype": "Attach",
+   "label": "DNA Result / Card"
+  },
+  {
+   "fieldname": "col_doc_dna_card",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "doc_dna_status",
+   "fieldtype": "Select",
+   "label": "DNA Status",
+   "options": "\nApproved\nDeclined"
+  },
+  {
+   "fieldname": "sec_doc_marking",
+   "fieldtype": "Section Break",
+   "label": "Marking"
+  },
+  {
+   "fieldname": "doc_marking",
+   "fieldtype": "Attach",
+   "label": "Marking"
+  },
+  {
+   "fieldname": "col_doc_marking",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "doc_marking_by",
+   "fieldtype": "Data",
+   "label": "Marked By (Doctor)"
+  },
+  {
+   "fieldname": "doc_marking_date",
+   "fieldtype": "Date",
+   "label": "Marking Date"
+  },
+  {
+   "fieldname": "sec_doc_owner_id",
+   "fieldtype": "Section Break",
+   "label": "Owner ID"
+  },
+  {
+   "fieldname": "doc_owner_id",
+   "fieldtype": "Attach",
+   "label": "Owner ID"
+  },
+  {
+   "fieldname": "col_doc_owner_id",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "doc_owner_id_date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "depends_on": "eval:doc.origin==\"Imported\"",
+   "fieldname": "sec_doc_passport",
+   "fieldtype": "Section Break",
+   "label": "Passport"
+  },
+  {
+   "fieldname": "doc_passport",
+   "fieldtype": "Attach",
+   "label": "Passport"
+  },
+  {
+   "fieldname": "col_doc_passport",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "doc_passport_no",
+   "fieldtype": "Data",
+   "label": "Registration / Passport Number"
+  },
+  {
+   "fieldname": "sec_doc_export_certificate",
+   "fieldtype": "Section Break",
+   "label": "Export Certificate"
+  },
+  {
+   "fieldname": "doc_export_certificate",
+   "fieldtype": "Attach",
+   "label": "Export Certificate"
+  },
+  {
+   "fieldname": "col_doc_export_certificate",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "doc_export_certificate_no",
+   "fieldtype": "Data",
+   "label": "Certificate Number"
+  },
+  {
+   "fieldname": "doc_export_date",
+   "fieldtype": "Date",
+   "label": "Date of Export"
+  },
+  {
+   "depends_on": "eval:doc.gender==\"Female\"",
+   "fieldname": "sec_doc_covering_certificate",
+   "fieldtype": "Section Break",
+   "label": "Covering Certificate"
+  },
+  {
+   "fieldname": "doc_covering_certificate",
+   "fieldtype": "Attach",
+   "label": "Covering Certificate"
+  },
+  {
+   "fieldname": "col_doc_covering_certificate",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "doc_covering_season",
+   "fieldtype": "Data",
+   "label": "Season"
+  },
+  {
+   "depends_on": "eval:doc.gender==\"Male\"",
+   "fieldname": "sec_doc_covering_agreement",
+   "fieldtype": "Section Break",
+   "label": "Covering Agreement"
+  },
+  {
+   "fieldname": "doc_covering_agreement",
+   "fieldtype": "Attach",
+   "label": "Covering Agreement"
+  },
+  {
+   "fieldname": "col_doc_covering_agreement",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "doc_covering_agreement_season",
+   "fieldtype": "Data",
+   "label": "Season"
+  },
+  {
+   "fieldname": "sec_doc_owner_change_form",
+   "fieldtype": "Section Break",
+   "label": "Owner Change Form"
+  },
+  {
+   "fieldname": "doc_owner_change_form",
+   "fieldtype": "Attach",
+   "label": "Owner Change Form"
+  },
+  {
+   "fieldname": "col_doc_owner_change_form",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "doc_owner_change_date",
+   "fieldtype": "Date",
+   "label": "Date of the Event"
+  },
+  {
+   "fieldname": "sec_doc_death_form",
+   "fieldtype": "Section Break",
+   "label": "Death Form"
+  },
+  {
+   "fieldname": "doc_death_form",
+   "fieldtype": "Attach",
+   "label": "Death Form"
+  },
+  {
+   "fieldname": "col_doc_death_form",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "doc_death_event_date",
+   "fieldtype": "Date",
+   "label": "Date of the Event"
+  },
+  {
+   "fieldname": "sec_doc_others",
+   "fieldtype": "Section Break",
+   "label": "Others"
+  },
+  {
+   "fieldname": "doc_others",
+   "fieldtype": "Attach",
+   "label": "Others"
+  },
+  {
+   "fieldname": "col_doc_others",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "doc_others_note",
+   "fieldtype": "Small Text",
+   "label": "Note"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-26 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "HMS",
+ "name": "Horse",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "search_fields": "name_ar,name_en,microchip_no",
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "name_en",
+ "track_changes": 1
+}

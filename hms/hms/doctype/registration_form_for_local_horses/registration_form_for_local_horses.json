@@ -1,0 +1,542 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-07-26 10:00:00.000000",
+ "default_print_format": "Local-Bred Horse Registration Form",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "horse_data_tab",
+  "naming_series",
+  "sec_horse",
+  "gender",
+  "color",
+  "breed",
+  "date_of_birth",
+  "place_of_birth",
+  "col_horse",
+  "microchip_no",
+  "current_location",
+  "life_status",
+  "death_date",
+  "notification_date",
+  "origin",
+  "names_tab",
+  "sec_proposed",
+  "name_1_ar",
+  "name_2_ar",
+  "name_3_ar",
+  "col_proposed_en",
+  "name_1_en",
+  "name_2_en",
+  "name_3_en",
+  "sec_approved",
+  "approved_name_ar",
+  "col_approved",
+  "approved_name_en",
+  "pedigree_tab",
+  "sec_sire",
+  "sire_name_ar",
+  "sire_name_en",
+  "sire_registration_no",
+  "col_sire_origin",
+  "sire_origin",
+  "sire_date_of_birth",
+  "sire_place_of_birth",
+  "col_sire_description",
+  "sire_color",
+  "sire_breed",
+  "sire_microchip_no",
+  "sec_dam",
+  "dam_name_ar",
+  "dam_name_en",
+  "dam_registration_no",
+  "col_dam_origin",
+  "dam_origin",
+  "dam_date_of_birth",
+  "dam_place_of_birth",
+  "col_dam_description",
+  "dam_color",
+  "dam_breed",
+  "dam_microchip_no",
+  "dam_life_status",
+  "dam_current_location",
+  "sec_covering",
+  "covering_location",
+  "col_covering",
+  "covering_date_1",
+  "covering_date_2",
+  "owner_tab",
+  "sec_owner",
+  "owner_name_ar",
+  "owner_name_en",
+  "owner_national_id",
+  "col_owner_contact",
+  "owner_phone",
+  "owner_city",
+  "owner_address",
+  "sec_breeder",
+  "breeder_name_ar",
+  "breeder_name_en",
+  "breeder_national_id",
+  "col_breeder_contact",
+  "breeder_phone",
+  "breeder_city",
+  "breeder_address",
+  "result_tab",
+  "sec_result",
+  "horse"
+ ],
+ "fields": [
+  {
+   "fieldname": "horse_data_tab",
+   "fieldtype": "Tab Break",
+   "label": "Horse Data"
+  },
+  {
+   "default": "REG-LOC-.YYYY.-.#####",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Series",
+   "no_copy": 1,
+   "options": "REG-LOC-.YYYY.-.#####\n",
+   "print_hide": 1,
+   "reqd": 1,
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "sec_horse",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "gender",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Sex",
+   "options": "\nMale\nFemale",
+   "reqd": 1
+  },
+  {
+   "fieldname": "color",
+   "fieldtype": "Link",
+   "label": "Color",
+   "options": "Color"
+  },
+  {
+   "fieldname": "breed",
+   "fieldtype": "Data",
+   "label": "Breed"
+  },
+  {
+   "fieldname": "date_of_birth",
+   "fieldtype": "Date",
+   "label": "Date of Birth",
+   "reqd": 1
+  },
+  {
+   "fieldname": "place_of_birth",
+   "fieldtype": "Data",
+   "label": "Place of Birth"
+  },
+  {
+   "fieldname": "col_horse",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "microchip_no",
+   "fieldtype": "Data",
+   "label": "Microchip No"
+  },
+  {
+   "fieldname": "current_location",
+   "fieldtype": "Data",
+   "label": "Current Location of Horse"
+  },
+  {
+   "default": "Alive",
+   "fieldname": "life_status",
+   "fieldtype": "Select",
+   "label": "Status of Life",
+   "options": "Alive\nDeceased"
+  },
+  {
+   "depends_on": "eval:doc.life_status==\"Deceased\"",
+   "fieldname": "death_date",
+   "fieldtype": "Date",
+   "label": "Date of Death"
+  },
+  {
+   "fieldname": "notification_date",
+   "fieldtype": "Date",
+   "label": "Notification Date"
+  },
+  {
+   "default": "Local",
+   "fieldname": "origin",
+   "fieldtype": "Select",
+   "label": "Country of Origin",
+   "options": "Local\nImported",
+   "read_only": 1
+  },
+  {
+   "fieldname": "names_tab",
+   "fieldtype": "Tab Break",
+   "label": "Proposed Names"
+  },
+  {
+   "fieldname": "sec_proposed",
+   "fieldtype": "Section Break",
+   "label": "Proposed Names in Order of Priority"
+  },
+  {
+   "fieldname": "name_1_ar",
+   "fieldtype": "Data",
+   "label": "Name 1 (Arabic)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "name_2_ar",
+   "fieldtype": "Data",
+   "label": "Name 2 (Arabic)"
+  },
+  {
+   "fieldname": "name_3_ar",
+   "fieldtype": "Data",
+   "label": "Name 3 (Arabic)"
+  },
+  {
+   "fieldname": "col_proposed_en",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "name_1_en",
+   "fieldtype": "Data",
+   "label": "Name 1 (English)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "name_2_en",
+   "fieldtype": "Data",
+   "label": "Name 2 (English)"
+  },
+  {
+   "fieldname": "name_3_en",
+   "fieldtype": "Data",
+   "label": "Name 3 (English)"
+  },
+  {
+   "fieldname": "sec_approved",
+   "fieldtype": "Section Break",
+   "label": "Approved Name"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "approved_name_ar",
+   "fieldtype": "Data",
+   "label": "Approved Name (Arabic)"
+  },
+  {
+   "fieldname": "col_approved",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "approved_name_en",
+   "fieldtype": "Data",
+   "label": "Approved Name (English)"
+  },
+  {
+   "fieldname": "pedigree_tab",
+   "fieldtype": "Tab Break",
+   "label": "Pedigree"
+  },
+  {
+   "fieldname": "sec_sire",
+   "fieldtype": "Section Break",
+   "label": "Sire's Data"
+  },
+  {
+   "fieldname": "sire_name_ar",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Sire's Name (Arabic)"
+  },
+  {
+   "fieldname": "sire_name_en",
+   "fieldtype": "Data",
+   "label": "Sire's Name (English)"
+  },
+  {
+   "fieldname": "sire_registration_no",
+   "fieldtype": "Data",
+   "label": "Registration No"
+  },
+  {
+   "fieldname": "col_sire_origin",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sire_origin",
+   "fieldtype": "Select",
+   "label": "Country of Origin",
+   "options": "\nLocal\nImported"
+  },
+  {
+   "fieldname": "sire_date_of_birth",
+   "fieldtype": "Date",
+   "label": "Date of Birth"
+  },
+  {
+   "fieldname": "sire_place_of_birth",
+   "fieldtype": "Data",
+   "label": "Place of Birth"
+  },
+  {
+   "fieldname": "col_sire_description",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sire_color",
+   "fieldtype": "Data",
+   "label": "Color"
+  },
+  {
+   "fieldname": "sire_breed",
+   "fieldtype": "Data",
+   "label": "Breed"
+  },
+  {
+   "fieldname": "sire_microchip_no",
+   "fieldtype": "Data",
+   "label": "Microchip No"
+  },
+  {
+   "fieldname": "sec_dam",
+   "fieldtype": "Section Break",
+   "label": "Dam's Data"
+  },
+  {
+   "fieldname": "dam_name_ar",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Dam's Name (Arabic)"
+  },
+  {
+   "fieldname": "dam_name_en",
+   "fieldtype": "Data",
+   "label": "Dam's Name (English)"
+  },
+  {
+   "fieldname": "dam_registration_no",
+   "fieldtype": "Data",
+   "label": "Registration No"
+  },
+  {
+   "fieldname": "col_dam_origin",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "dam_origin",
+   "fieldtype": "Select",
+   "label": "Country of Origin",
+   "options": "\nLocal\nImported"
+  },
+  {
+   "fieldname": "dam_date_of_birth",
+   "fieldtype": "Date",
+   "label": "Date of Birth"
+  },
+  {
+   "fieldname": "dam_place_of_birth",
+   "fieldtype": "Data",
+   "label": "Place of Birth"
+  },
+  {
+   "fieldname": "col_dam_description",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "dam_color",
+   "fieldtype": "Data",
+   "label": "Color"
+  },
+  {
+   "fieldname": "dam_breed",
+   "fieldtype": "Data",
+   "label": "Breed"
+  },
+  {
+   "fieldname": "dam_microchip_no",
+   "fieldtype": "Data",
+   "label": "Microchip No"
+  },
+  {
+   "fieldname": "dam_life_status",
+   "fieldtype": "Select",
+   "label": "Status of Life",
+   "options": "\nAlive\nDeceased"
+  },
+  {
+   "fieldname": "dam_current_location",
+   "fieldtype": "Data",
+   "label": "Current Location of Dam"
+  },
+  {
+   "fieldname": "sec_covering",
+   "fieldtype": "Section Break",
+   "label": "Covering"
+  },
+  {
+   "fieldname": "covering_location",
+   "fieldtype": "Select",
+   "label": "Location of Covering",
+   "options": "\nLocal\nExternal"
+  },
+  {
+   "fieldname": "col_covering",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "covering_date_1",
+   "fieldtype": "Date",
+   "label": "Date of 1st Covering"
+  },
+  {
+   "fieldname": "covering_date_2",
+   "fieldtype": "Date",
+   "label": "Date of 2nd Covering"
+  },
+  {
+   "fieldname": "owner_tab",
+   "fieldtype": "Tab Break",
+   "label": "Owner & Breeder"
+  },
+  {
+   "fieldname": "sec_owner",
+   "fieldtype": "Section Break",
+   "label": "Owner's Data"
+  },
+  {
+   "fieldname": "owner_name_ar",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Owner Name (Arabic)"
+  },
+  {
+   "fieldname": "owner_name_en",
+   "fieldtype": "Data",
+   "label": "Owner Name (English)"
+  },
+  {
+   "fieldname": "owner_national_id",
+   "fieldtype": "Data",
+   "label": "Owner National ID / Passport No"
+  },
+  {
+   "fieldname": "col_owner_contact",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "owner_phone",
+   "fieldtype": "Data",
+   "label": "Owner Phone No"
+  },
+  {
+   "fieldname": "owner_city",
+   "fieldtype": "Data",
+   "label": "Owner City"
+  },
+  {
+   "fieldname": "owner_address",
+   "fieldtype": "Small Text",
+   "label": "Owner Address"
+  },
+  {
+   "fieldname": "sec_breeder",
+   "fieldtype": "Section Break",
+   "label": "Breeder's Data"
+  },
+  {
+   "fieldname": "breeder_name_ar",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Breeder Name (Arabic)"
+  },
+  {
+   "fieldname": "breeder_name_en",
+   "fieldtype": "Data",
+   "label": "Breeder Name (English)"
+  },
+  {
+   "fieldname": "breeder_national_id",
+   "fieldtype": "Data",
+   "label": "Breeder National ID / Passport No"
+  },
+  {
+   "fieldname": "col_breeder_contact",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "breeder_phone",
+   "fieldtype": "Data",
+   "label": "Breeder Phone No"
+  },
+  {
+   "fieldname": "breeder_city",
+   "fieldtype": "Data",
+   "label": "Breeder City"
+  },
+  {
+   "fieldname": "breeder_address",
+   "fieldtype": "Small Text",
+   "label": "Breeder Address"
+  },
+  {
+   "fieldname": "result_tab",
+   "fieldtype": "Tab Break",
+   "label": "Registration"
+  },
+  {
+   "fieldname": "sec_result",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "horse",
+   "fieldtype": "Link",
+   "label": "Registered Horse",
+   "no_copy": 1,
+   "options": "Horse"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-26 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "HMS",
+ "name": "Registration Form for Local Horses",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "search_fields": "name_1_en,owner_name_en,horse",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

@@ -27,6 +27,7 @@ app_license = "mit"
 # include js, css files in header of desk.html
 # app_include_css = "/assets/hms/css/hms.css"
 # app_include_js = "/assets/hms/js/hms.js"
+app_include_js = "/assets/hms/js/studbook.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/hms/css/hms.css"
@@ -247,3 +248,26 @@ app_license = "mit"
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
 
+
+# Fixtures
+# --------
+# the horse colours of the LHA forms, the Color doctype ships empty
+
+fixtures = [
+	{"dt": "Color", "filters": [["name", "in", ["Grey", "Bay", "Black", "Chestnut"]]]},
+]
+
+
+# Scheduled Tasks
+# ---------------
+# The studbook sync. The cron below is only the starting point: HMS Settings
+# rewrites this job's schedule whenever the frequency is changed there, and
+# stops it outright when the frequency is Never.
+
+scheduler_events = {
+	"cron": {
+		"0 0 * * *": [
+			"hms.api.legacy_sync.scheduled_sync",
+		],
+	},
+}
