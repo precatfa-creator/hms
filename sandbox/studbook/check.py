@@ -12,8 +12,16 @@ import psycopg2
 RO = dict(host="127.0.0.1", port=5433, dbname="studbook_legacy",
           user="studbook_ro", password="studbook_ro_pw")
 
-TABLES = {"horse", "horse_owner", "ownership_log", "name_log",
-          "revinfo", "horse_aud", "ownership_log_aud", "name_log_aud"}
+TABLES = {"horse", "owner", "horse_owner", "horse_breeder",
+          "country", "city", "book_type", "horse_color",
+          "event", "event_type", "event_old_owner", "event_new_owner",
+          "file", "application_user", "laboratory",
+          "revision_info", "horse_aud", "owner_aud", "event_aud",
+          "horse_owner_aud", "horse_breeder_aud",
+          "event_old_owner_aud", "event_new_owner_aud"}
+
+AUDIT_TABLES = ("horse_aud", "owner_aud", "event_aud", "horse_owner_aud",
+                "horse_breeder_aud", "event_old_owner_aud", "event_new_owner_aud")
 
 
 def main():
@@ -25,13 +33,18 @@ def main():
 	assert TABLES <= found, f"missing tables: {TABLES - found}"
 
 	# audit rows must always join to a revision, however the data got in
-	for table in ("horse_aud", "ownership_log_aud", "name_log_aud"):
+	for table in AUDIT_TABLES:
 		cursor.execute(f"SELECT count(*) FROM {table} a "
-		               f"LEFT JOIN revinfo r USING (rev) WHERE r.rev IS NULL")
+		               f"LEFT JOIN revision_info r ON r.id = a.rev WHERE r.id IS NULL")
 		assert cursor.fetchone()[0] == 0, f"{table} has rows with no revision"
 
+	# exactly one home country, which is what makes origin derivable
+	cursor.execute("SELECT count(*) FROM country WHERE local")
+	local_countries = cursor.fetchone()[0]
+	assert local_countries <= 1, f"{local_countries} countries are flagged local"
+
 	try:
-		cursor.execute("UPDATE horse SET name_en = 'nope'")
+		cursor.execute("UPDATE horse SET name = 'nope'")
 	except psycopg2.errors.InsufficientPrivilege:
 		connection.rollback()
 	else:

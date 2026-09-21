@@ -1,0 +1,58 @@
+[
+ {
+  "description": "Change of Owner",
+  "doctype": "Horse Event Type",
+  "event_type": "CHANGE_OWNER",
+  "name": "CHANGE_OWNER",
+  "selectable": 1
+ },
+ {
+  "description": "Foal Abortion",
+  "doctype": "Horse Event Type",
+  "event_type": "FOAL_ABORTION",
+  "name": "FOAL_ABORTION",
+  "selectable": 1
+ },
+ {
+  "description": "New Foal",
+  "doctype": "Horse Event Type",
+  "event_type": "NEW_FOAL",
+  "name": "NEW_FOAL",
+  "selectable": 1
+ },
+ {
+  "description": "Death",
+  "doctype": "Horse Event Type",
+  "event_type": "DEATH",
+  "name": "DEATH",
+  "selectable": 1
+ },
+ {
+  "description": "Import",
+  "doctype": "Horse Event Type",
+  "event_type": "IMPORT",
+  "name": "IMPORT",
+  "selectable": 1
+ },
+ {
+  "description": "Export",
+  "doctype": "Horse Event Type",
+  "event_type": "EXPORT",
+  "name": "EXPORT",
+  "selectable": 1
+ },
+ {
+  "description": "Gelding",
+  "doctype": "Horse Event Type",
+  "event_type": "GELDING",
+  "name": "GELDING",
+  "selectable": 1
+ },
+ {
+  "description": "Covered",
+  "doctype": "Horse Event Type",
+  "event_type": "COVERED",
+  "name": "COVERED",
+  "selectable": 1
+ }
+]

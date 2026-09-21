@@ -2,7 +2,7 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "naming_series:",
- "creation": "2026-07-26 10:00:00.000000",
+ "creation": "2026-09-21 10:00:00.000000",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
@@ -11,13 +11,29 @@
   "sec_name",
   "owner_name_ar",
   "owner_name_en",
+  "suffix",
+  "col_kind",
+  "business",
+  "business_number",
   "national_id",
   "passport_no",
-  "col_contact",
+  "farm_name",
+  "sec_contact",
   "phone",
   "email",
+  "col_address",
+  "address",
   "city",
-  "address"
+  "region",
+  "postal_code",
+  "owner_country",
+  "sec_location",
+  "latitude",
+  "col_longitude",
+  "longitude",
+  "sec_note",
+  "note",
+  "studbook_id"
  ],
  "fields": [
   {
@@ -52,18 +68,50 @@
    "reqd": 1
   },
   {
+   "description": "Globally unique short identifier printed on certificates.",
+   "fieldname": "suffix",
+   "fieldtype": "Data",
+   "label": "Suffix",
+   "unique": 1
+  },
+  {
+   "fieldname": "col_kind",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "business",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Business / Farm / Syndicate"
+  },
+  {
+   "depends_on": "eval:doc.business",
+   "fieldname": "business_number",
+   "fieldtype": "Data",
+   "label": "Business Number"
+  },
+  {
+   "depends_on": "eval:!doc.business",
    "fieldname": "national_id",
    "fieldtype": "Data",
    "label": "National ID No"
   },
   {
+   "depends_on": "eval:!doc.business",
    "fieldname": "passport_no",
    "fieldtype": "Data",
    "label": "Passport No"
   },
   {
-   "fieldname": "col_contact",
-   "fieldtype": "Column Break"
+   "fieldname": "farm_name",
+   "fieldtype": "Data",
+   "label": "Farm / Stud Name"
+  },
+  {
+   "fieldname": "sec_contact",
+   "fieldtype": "Section Break",
+   "label": "Contact"
   },
   {
    "fieldname": "phone",
@@ -79,19 +127,79 @@
    "options": "Email"
   },
   {
+   "fieldname": "col_address",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "label": "Street Address"
+  },
+  {
    "fieldname": "city",
    "fieldtype": "Data",
    "label": "City"
   },
   {
-   "fieldname": "address",
+   "fieldname": "region",
+   "fieldtype": "Data",
+   "label": "Region / State"
+  },
+  {
+   "fieldname": "postal_code",
+   "fieldtype": "Data",
+   "label": "Postal Code"
+  },
+  {
+   "fieldname": "owner_country",
+   "fieldtype": "Link",
+   "label": "Country",
+   "options": "Studbook Country"
+  },
+  {
+   "fieldname": "sec_location",
+   "fieldtype": "Section Break",
+   "label": "Location"
+  },
+  {
+   "fieldname": "latitude",
+   "fieldtype": "Float",
+   "label": "Latitude",
+   "precision": "6"
+  },
+  {
+   "fieldname": "col_longitude",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "longitude",
+   "fieldtype": "Float",
+   "label": "Longitude",
+   "precision": "6"
+  },
+  {
+   "fieldname": "sec_note",
+   "fieldtype": "Section Break"
+  },
+  {
+   "description": "Never printed on official documents.",
+   "fieldname": "note",
    "fieldtype": "Small Text",
-   "label": "Complete Address"
+   "label": "Internal Note"
+  },
+  {
+   "fieldname": "studbook_id",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Studbook ID",
+   "no_copy": 1,
+   "read_only": 1,
+   "search_index": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-07-26 10:00:00.000000",
+ "modified": "2026-09-21 10:00:00.000000",
  "modified_by": "Administrator",
  "module": "HMS",
  "name": "Horse Owner",

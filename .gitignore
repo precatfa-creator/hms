@@ -5,3 +5,9 @@
 tags
 node_modules
 __pycache__
+# generated while building docs/HMS-Screens.pdf
+screenshots/handbook.html
+screenshots/parts/
+
+# Windows download metadata
+*:Zone.Identifier

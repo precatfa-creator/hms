@@ -1,0 +1,237 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:category",
+ "creation": "2026-09-21 10:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "category",
+  "disabled",
+  "col_category",
+  "sort_order",
+  "description",
+  "sec_applicability",
+  "applies_to_local",
+  "required_for_local",
+  "col_imported",
+  "applies_to_imported",
+  "required_for_imported",
+  "col_scope",
+  "applies_to_sex",
+  "applies_to_breed",
+  "applies_to_country",
+  "sec_limits",
+  "max_count",
+  "col_expiry",
+  "has_expiry",
+  "sec_companions",
+  "needs_document_date",
+  "document_date_label",
+  "needs_reference_no",
+  "reference_no_label",
+  "col_companions",
+  "needs_doc_status",
+  "needs_season",
+  "needs_notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "category",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Category",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "disabled",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Disabled"
+  },
+  {
+   "fieldname": "col_category",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "sort_order",
+   "fieldtype": "Int",
+   "label": "Sort Order"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "sec_applicability",
+   "fieldtype": "Section Break",
+   "label": "Applies To"
+  },
+  {
+   "default": "1",
+   "fieldname": "applies_to_local",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Local Horses"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:doc.applies_to_local",
+   "fieldname": "required_for_local",
+   "fieldtype": "Check",
+   "label": "Required for Local"
+  },
+  {
+   "fieldname": "col_imported",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "applies_to_imported",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Imported Horses"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:doc.applies_to_imported",
+   "fieldname": "required_for_imported",
+   "fieldtype": "Check",
+   "label": "Required for Imported"
+  },
+  {
+   "fieldname": "col_scope",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "All",
+   "description": "Males covers Male, Stallion, Gelding, Cryptorchid and Monorchid. Females covers Female and Broodmare.",
+   "fieldname": "applies_to_sex",
+   "fieldtype": "Select",
+   "label": "Sex",
+   "options": "All\nMales\nFemales"
+  },
+  {
+   "default": "All",
+   "fieldname": "applies_to_breed",
+   "fieldtype": "Select",
+   "label": "Breed",
+   "options": "All\nArabian\nThoroughbred"
+  },
+  {
+   "description": "Leave empty to apply to every country of origin.",
+   "fieldname": "applies_to_country",
+   "fieldtype": "Link",
+   "label": "Country of Origin",
+   "options": "Studbook Country"
+  },
+  {
+   "fieldname": "sec_limits",
+   "fieldtype": "Section Break",
+   "label": "Limits"
+  },
+  {
+   "default": "1",
+   "description": "How many documents of this category one horse may have. 0 means no limit.",
+   "fieldname": "max_count",
+   "fieldtype": "Int",
+   "label": "Maximum Uploads"
+  },
+  {
+   "fieldname": "col_expiry",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "has_expiry",
+   "fieldtype": "Check",
+   "label": "Has Expiry Date"
+  },
+  {
+   "fieldname": "sec_companions",
+   "fieldtype": "Section Break",
+   "label": "Required Details"
+  },
+  {
+   "default": "0",
+   "fieldname": "needs_document_date",
+   "fieldtype": "Check",
+   "label": "Date"
+  },
+  {
+   "default": "Date",
+   "depends_on": "eval:doc.needs_document_date",
+   "fieldname": "document_date_label",
+   "fieldtype": "Data",
+   "label": "Date Label"
+  },
+  {
+   "default": "0",
+   "fieldname": "needs_reference_no",
+   "fieldtype": "Check",
+   "label": "Reference Number"
+  },
+  {
+   "default": "Reference Number",
+   "depends_on": "eval:doc.needs_reference_no",
+   "fieldname": "reference_no_label",
+   "fieldtype": "Data",
+   "label": "Reference Number Label"
+  },
+  {
+   "fieldname": "col_companions",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "needs_doc_status",
+   "fieldtype": "Check",
+   "label": "Approval Status"
+  },
+  {
+   "default": "0",
+   "fieldname": "needs_season",
+   "fieldtype": "Check",
+   "label": "Season"
+  },
+  {
+   "default": "0",
+   "fieldname": "needs_notes",
+   "fieldtype": "Check",
+   "label": "Note"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-21 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "HMS",
+ "name": "Horse Document Category",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "search_fields": "description",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

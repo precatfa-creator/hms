@@ -13,7 +13,7 @@ import sys
 
 import frappe
 
-from hms.hms.documents import DOC_COMPANIONS, REQUIRED
+from hms.hms import documents
 
 SITE = sys.argv[1] if len(sys.argv) > 1 else "losand.local"
 MARKER = "Al Wathba"
@@ -59,6 +59,21 @@ DAMS = [
 ]
 
 
+def ensure_countries():
+	"""The sync brings these; a site that has never synced still needs them."""
+	for name, alpha2, alpha3, code, local in (("Libya", "LY", "LBY", "434", 1),
+	                                          ("Egypt", "EG", "EGY", "818", 0)):
+		if not frappe.db.exists("Studbook Country", name):
+			frappe.get_doc({"doctype": "Studbook Country", "country_name": name,
+			                "alpha2": alpha2, "alpha3": alpha3,
+			                "numeric_code": code, "is_local": local}).insert()
+	for color in ("Bay", "Grey", "Black", "Chestnut"):
+		if not frappe.db.exists("Horse Color", f"{color} (Arabian)"):
+			frappe.get_doc({"doctype": "Horse Color", "color_name": color,
+			                "short_name": color[:2].lower() + ".",
+			                "horse_breed": "Arabian"}).insert()
+
+
 def public_files():
 	files = frappe.get_all(
 		"File",
@@ -72,31 +87,50 @@ def public_files():
 	return [f.file_url for f in files]
 
 
-def document_values(origin, coverage, files, rng):
-	"""Attachment + companion values for the required set of this origin."""
-	required = REQUIRED[origin]
-	if coverage == "none":
-		return {}
-	keys = required if coverage == "full" else required[: rng.randint(1, len(required) - 1)]
+DOCTORS = ["د. عمر الشريف", "د. ناصر الفقيه", "د. هالة بن عمران"]
 
-	values = {}
-	for key in keys:
-		values[f"doc_{key}"] = rng.choice(files)
-		for field in DOC_COMPANIONS[key]:
-			if field.endswith("_date"):
-				values[field] = f"202{rng.randint(3, 6)}-0{rng.randint(1, 9)}-1{rng.randint(0, 8)}"
-			elif field == "doc_dna_status":
-				values[field] = "Approved"
-			elif field == "doc_marking_by":
-				values[field] = rng.choice(["د. عمر الشريف", "د. ناصر الفقيه", "د. هالة بن عمران"])
-			else:
-				values[field] = f"{rng.randint(1000, 9999)}/{rng.randint(2018, 2026)}"
+
+def add_documents(horse, coverage, files, rng):
+	"""Raise Horse Documents until the horse reads Completed, or part way.
+
+	Which categories a horse needs is the Horse Document Category's decision,
+	not this script's -- so it asks.
+	"""
+	if coverage == "none":
+		return
+
+	values = horse.as_dict()
+	required = [c for c in documents.get_categories() if documents.is_required(c, values)]
+	wanted = required if coverage == "full" else required[: rng.randint(1, len(required) - 1)]
+
+	for category in wanted:
+		row = {
+			"doctype": "Horse Document",
+			"horse": horse.name,
+			"category": category["category"],
+			"attachment": rng.choice(files),
+		}
+		if category.get("needs_document_date"):
+			row["document_date"] = f"202{rng.randint(3, 6)}-0{rng.randint(1, 9)}-1{rng.randint(0, 8)}"
+		if category.get("needs_reference_no"):
+			row["reference_no"] = (rng.choice(DOCTORS) if category["category"] == "Marking"
+			                       else f"{rng.randint(1000, 9999)}/{rng.randint(2018, 2026)}")
+		if category.get("needs_doc_status"):
+			row["doc_status"] = "Approved"
+		if category.get("needs_season"):
+			row["season"] = str(rng.randint(2022, 2026))
+		if category.get("needs_notes"):
+			row["notes"] = "صورة من ملف الجواد"
+		frappe.get_doc(row).insert()
 
 	if coverage == "partial":
-		# one optional document on top, it must not change the status
-		values["doc_others"] = rng.choice(files)
-		values["doc_others_note"] = "صورة من ملف الجواد"
-	return values
+		# an optional document on top, which must not move the status
+		frappe.get_doc({
+			"doctype": "Horse Document", "horse": horse.name, "category": "Others",
+			"attachment": rng.choice(files), "notes": "صورة من ملف الجواد",
+		}).insert()
+
+	horse.reload()
 
 
 def seed():
@@ -115,6 +149,7 @@ def seed():
 			f"{prefix}_phone": phone,
 		}
 
+	ensure_countries()
 	horses = []
 	for idx, (name_ar, name_en, sex, color, origin, year, place, coverage) in enumerate(HORSES):
 		sire = SIRES[idx % len(SIRES)]
@@ -126,16 +161,18 @@ def seed():
 			"name_ar": name_ar,
 			"name_en": name_en,
 			"gender": sex,
-			"origin": origin,
-			"color": color,
+			# origin is derived from this, it is not stored
+			"birthplace_country": "Libya" if origin == "Local" else "Egypt",
+			"color": f"{color} (Arabian)",
 			"breed": "Arabian",
+			"status": rng.choice(["Register in Studbook", "Waiting for Laboratory",
+			                      "Waiting for Marking Data"]),
 			"date_of_birth": f"{year}-0{rng.randint(1, 9)}-1{rng.randint(0, 8)}",
 			"place_of_birth": place,
 			"current_location": rng.choice(["ميدان أبو سته", "إسطبل الفرنسية", "مزرعة الوادي"]),
 			"microchip_no": f"9851{rng.randint(10**10, 10**11 - 1)}",
 			"ueln_no": f"434{rng.randint(10**11, 10**12 - 1)}",
-			"life_status": "Alive" if alive else "Deceased",
-			"death_date": None if alive else f"{year + 9}-03-14",
+			"date_of_death": None if alive else f"{year + 9}-03-14",
 			"notification_date": f"{year}-1{rng.randint(0, 2)}-05",
 			"owner_since": f"{year}-0{rng.randint(1, 9)}-20",
 			"sire_name_ar": sire[0], "sire_name_en": sire[1], "sire_registration_no": sire[2],
@@ -156,10 +193,10 @@ def seed():
 		})
 		horse.update(party(idx, "owner"))
 		horse.update(party(idx + 3, "breeder"))
-		horse.update(document_values(origin, coverage, files, rng))
 		horse.insert()
+		add_documents(horse, coverage, files, rng)
 		horses.append(horse)
-		print(f"  {horse.name}  {name_en:<14} {origin:<8} {horse.status}")
+		print(f"  {horse.name}  {name_en:<14} {origin:<8} {horse.documents_status}")
 
 	# a registration form per young local horse, plus one still unlinked
 	for horse in [h for h in horses if h.origin == "Local"][:4]:
@@ -194,7 +231,7 @@ def seed():
 
 	frappe.get_doc({
 		"doctype": "Registration Form for Local Horses",
-		"gender": "Female", "color": "Bay", "breed": "Arabian",
+		"gender": "Female", "color": "Bay (Arabian)", "breed": "Arabian",
 		"date_of_birth": "2026-03-02", "place_of_birth": "طرابلس",
 		"current_location": "ميدان أبو سته",
 		**party(1, "owner"), **party(4, "breeder"),
@@ -231,10 +268,11 @@ def seed():
 
 	frappe.db.commit()
 
-	print("\nstatus spread:")
+	print("\ndocuments status spread:")
 	for status in ("Completed", "Partially Completed", "Not Yet"):
-		print(f"  {status:<22} {frappe.db.count('Horse', {'status': status})}")
-	for doctype in ("Horse", "Registration Form for Local Horses",
+		print(f"  {status:<22} {frappe.db.count('Horse', {'documents_status': status})}")
+	for doctype in ("Horse", "Horse Document", "Horse Event",
+	                "Registration Form for Local Horses",
 	                "Owner Change Form", "Name Change Form"):
 		print(f"  {doctype:<38} {frappe.db.count(doctype)}")
 

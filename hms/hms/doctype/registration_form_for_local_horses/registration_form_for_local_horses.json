@@ -2,7 +2,7 @@
  "actions": [],
  "allow_rename": 0,
  "autoname": "naming_series:",
- "creation": "2026-07-26 10:00:00.000000",
+ "creation": "2026-09-21 10:00:00.000000",
  "default_print_format": "Local-Bred Horse Registration Form",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -87,7 +87,8 @@
   "breeder_address",
   "result_tab",
   "sec_result",
-  "horse"
+  "horse",
+  "source_event"
  ],
  "fields": [
   {
@@ -123,12 +124,13 @@
    "fieldname": "color",
    "fieldtype": "Link",
    "label": "Color",
-   "options": "Color"
+   "options": "Horse Color"
   },
   {
    "fieldname": "breed",
-   "fieldtype": "Data",
-   "label": "Breed"
+   "fieldtype": "Select",
+   "label": "Breed",
+   "options": "\nArabian\nThoroughbred"
   },
   {
    "fieldname": "date_of_birth",
@@ -509,11 +511,19 @@
    "label": "Registered Horse",
    "no_copy": 1,
    "options": "Horse"
+  },
+  {
+   "fieldname": "source_event",
+   "fieldtype": "Link",
+   "label": "From Event",
+   "no_copy": 1,
+   "options": "Horse Event",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-07-26 10:00:00.000000",
+ "modified": "2026-09-21 10:00:00.000000",
  "modified_by": "Administrator",
  "module": "HMS",
  "name": "Registration Form for Local Horses",

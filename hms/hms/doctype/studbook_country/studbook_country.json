@@ -1,0 +1,97 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:country_name",
+ "creation": "2026-09-21 10:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "country_name",
+  "alpha2",
+  "alpha3",
+  "numeric_code",
+  "col_country",
+  "is_local",
+  "studbook_id"
+ ],
+ "fields": [
+  {
+   "fieldname": "country_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Country Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "alpha2",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "ISO Alpha-2",
+   "length": 2
+  },
+  {
+   "fieldname": "alpha3",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "ISO Alpha-3",
+   "length": 3
+  },
+  {
+   "fieldname": "numeric_code",
+   "fieldtype": "Data",
+   "label": "ISO Numeric Code",
+   "length": 3
+  },
+  {
+   "fieldname": "col_country",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "description": "The one country this studbook authority operates in. A horse born here is Local; anywhere else is Imported.",
+   "fieldname": "is_local",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Local Country"
+  },
+  {
+   "fieldname": "studbook_id",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Studbook ID",
+   "no_copy": 1,
+   "read_only": 1,
+   "search_index": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-21 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "HMS",
+ "name": "Studbook Country",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "search_fields": "alpha2,alpha3",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

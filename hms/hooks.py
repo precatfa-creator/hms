@@ -253,8 +253,12 @@ app_include_js = "/assets/hms/js/studbook.js"
 # --------
 # the horse colours of the LHA forms, the Color doctype ships empty
 
+# The document categories and event types a fresh site needs before the
+# studbook has ever been reached. Countries, colors and book types arrive with
+# the first sync, so they are not shipped here.
 fixtures = [
-	{"dt": "Color", "filters": [["name", "in", ["Grey", "Bay", "Black", "Chestnut"]]]},
+	"Horse Document Category",
+	"Horse Event Type",
 ]
 
 
@@ -269,5 +273,24 @@ scheduler_events = {
 		"0 0 * * *": [
 			"hms.api.legacy_sync.scheduled_sync",
 		],
+	},
+	# The event poll is cheap and wants to be timely, so it runs on Frappe's
+	# own hourly slot rather than earning a second schedule form. It returns
+	# immediately when event polling is off.
+	"hourly": [
+		"hms.api.events.scheduled_poll",
+	],
+}
+
+
+# The event actions point at Horse Event Types, which are fixtures, and
+# fixtures are synced after patches. So the seeding runs here instead.
+after_migrate = ["hms.api.events.seed_default_actions"]
+
+
+doc_events = {
+	"Horse Document Category": {
+		"on_update": "hms.hms.documents.clear_category_cache",
+		"after_delete": "hms.hms.documents.clear_category_cache",
 	},
 }

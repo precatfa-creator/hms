@@ -1,112 +1,189 @@
--- Starter rows for the sandbox. Open in DBeaver as studbook_app and run the
--- whole script with Alt+X, or one statement at a time with Ctrl+Enter.
+-- Sample StudLib data: enough of everything HMS reads to exercise it.
 --
--- Edit the values freely: this is a fixture, not a migration. Re-running it is
--- safe, the ON CONFLICT clauses update in place rather than erroring.
+-- Four horses (a local sire and dam, their foal, one imported), three owners,
+-- both M:N tables, all eight event types with four real events, two files, and
+-- a two-revision audit trail.
+--
+-- Re-runnable: it truncates first, so a second run replaces its rows rather
+-- than doubling them.
 
--- ------------------------------------------------------------------ owners
-INSERT INTO horse_owner (owner_code, owner_name_ar, owner_name_en, national_id,
-                         phone, city, address)
-VALUES
-	('OWN-00001', 'محمد الفيتوري', 'Mohamed Al Fituri', '119820451122', '0912345678', 'Tripoli', 'Hay Al Andalus'),
-	('OWN-00002', 'خالد المصراتي', 'Khaled Al Misrati', '119790332211', '0913456789', 'Misrata', 'Zawiyat Al Mahjoub')
-ON CONFLICT (owner_code) DO NOTHING;
+BEGIN;
+
+TRUNCATE
+	event_new_owner_aud, event_old_owner_aud, horse_breeder_aud, horse_owner_aud,
+	event_aud, horse_aud, owner_aud,
+	event_new_owner, event_old_owner, event, event_type,
+	file, horse_breeder, horse_owner, horse,
+	owner, book_type, horse_color, city, country,
+	application_user, laboratory, revision_info
+RESTART IDENTITY CASCADE;
+
+-- --------------------------------------------------------------- reference
+INSERT INTO country (id, name, alpha2, alpha3, code, local) VALUES
+	(1, 'Libya',  'LY', 'LBY', '434', true),
+	(2, 'Egypt',  'EG', 'EGY', '818', false),
+	(3, 'France', 'FR', 'FRA', '250', false);
+
+INSERT INTO city (name) VALUES ('Tripoli'), ('Benghazi'), ('Misrata');
+
+INSERT INTO horse_color (id, name, short_name, horse_breed, validation_rule) VALUES
+	(1, 'Bay',      'b.',  'ARABIAN',      'AT_LEAST_ONE_PARENT'),
+	(2, 'Grey',     'gr.', 'ARABIAN',      'AT_LEAST_ONE_PARENT'),
+	(3, 'Chestnut', 'ch.', 'ARABIAN',      'BOTH_PARENTS'),
+	(4, 'Black',    'bl.', 'ARABIAN',      NULL),
+	(5, 'Bay',      'b.',  'THOROUGHBRED', 'AT_LEAST_ONE_PARENT'),
+	(6, 'Chestnut', 'ch.', 'THOROUGHBRED', 'BOTH_PARENTS');
+
+INSERT INTO book_type (id, code, authority, horse_breed, libyan, country_id) VALUES
+	(1, 'LSB',  'Libyan Stud Book',                'ARABIAN',      true,  1),
+	(2, 'WAHO', 'World Arabian Horse Organization','ARABIAN',      false, NULL),
+	(3, 'LTB',  'Libyan Thoroughbred Book',        'THOROUGHBRED', true,  1);
+
+INSERT INTO laboratory (id, name) VALUES (1, 'Veterinary Genetics Laboratory');
+
+INSERT INTO application_user (id, email, password, full_name, system_role, breed) VALUES
+	(1, 'vet@lsb.ly', 'x', 'Dr. Salem Ahmed', 'SECOND_LEVEL_EDITOR', 'ARABIAN');
+
+-- --------------------------------------------------------------- ownership
+INSERT INTO owner (id, full_name, suffix, business, business_number,
+                   national_id_number, farm_name, phone, street, city,
+                   postal_code, region, country_id) VALUES
+	(1, 'Ahmed Al-Mansouri', 'ALM', false, NULL, '119880012345',
+	    'Al-Mansouri Stud', '+218 91 000 0001', 'Gargaresh Road', 'Tripoli',
+	    '11111', 'Tripoli', 1),
+	(2, 'Fatima Al-Zawawi', 'FAZ', false, NULL, '219900054321',
+	    NULL, '+218 92 000 0002', 'Street 17', 'Benghazi', '22222', 'Benghazi', 1),
+	(3, 'Sahara Arabians Ltd', 'SAH', true, 'LY-BR-99001', NULL,
+	    'Sahara Arabians', '+218 93 000 0003', 'Airport Road', 'Misrata',
+	    '33333', 'Misrata', 1);
 
 -- ------------------------------------------------------------------- horses
--- Only registration_no, name_ar, name_en, origin and gender are required.
-INSERT INTO horse (registration_no, name_ar, name_en, ueln_no, microchip_no,
-                   origin, gender, color, breed, date_of_birth, place_of_birth,
-                   current_location, life_status,
-                   sire_name_ar, sire_name_en, sire_registration_no, sire_origin,
-                   sire_date_of_birth, sire_color, sire_breed,
-                   dam_name_ar, dam_name_en, dam_registration_no, dam_origin,
-                   dam_date_of_birth, dam_color, dam_breed,
-                   owner_name_ar, owner_name_en, owner_national_id, owner_phone,
-                   owner_city, owner_address, owner_since,
-                   breeder_name_ar, breeder_name_en, breeder_national_id,
-                   breeder_phone, breeder_city,
-                   status)
-VALUES
-	('LY-2026-00001', 'الوثبة', 'Al Wathba', 'LY01201800001', '985197451334405',
-	 'Local', 'Female', 'Grey', 'Arabian', '2018-02-16', 'مزرعة الوادي',
-	 'مزرعة الوادي', 'Alive',
-	 'مرواس', 'Marwas', 'LY-2010-00044', 'Local', '2010-05-02', 'Bay', 'Arabian',
-	 'نورة', 'Noura', 'LY-2011-00071', 'Local', '2011-04-19', 'Grey', 'Arabian',
-	 'محمد الفيتوري', 'Mohamed Al Fituri', '119820451122', '0912345678',
-	 'Tripoli', 'Hay Al Andalus', '2019-01-10',
-	 'سالم بن نايل', 'Salem Ben Nayel', '119750112233', '0914567890', 'Tripoli',
-	 'Completed'),
+-- 1 sire, 2 dam, 3 their foal (still NEW_FOAL, so no registry_id yet),
+-- 4 imported from Egypt
+INSERT INTO horse (id, name, local_name, name_suffix, breed, sex, status,
+                   horse_classification, uuid, ueln, registry_id,
+                   previous_registry_id, transponder_code, strain,
+                   date_of_birth, date_of_registration, date_of_control,
+                   date_of_declaration, date_of_importing, dna_sample_exists,
+                   book_number, book_page, notes,
+                   father_id, mother_id, birthplace_country_id,
+                   import_country_id, book_type_id, previous_book_type_id,
+                   color_id, controlled_by_id) VALUES
+	(1, 'Sahm Al-Sahra', 'سهم الصحراء', NULL, 'ARABIAN', 'STALLION',
+	    'REGISTER_IN_STUDBOOK', 'RACING',
+	    '11111111-1111-4111-8111-111111111111', '434002W00000001', 'AH-1001',
+	    NULL, '985101000100001', 'Kuhailan',
+	    '2016-03-12', '2018-01-10', '2016-09-01', '2016-04-01', NULL, true,
+	    3, 45, 'Foundation sire.',
+	    NULL, NULL, 1, NULL, 1, NULL, 1, 1),
 
-	('LY-2026-00002', 'نجم الليل', 'Najm Al Layl', 'LY01201500002', '985142016061089',
-	 'Imported', 'Male', 'Black', 'Arabian', '2015-08-15', 'Egypt',
-	 'إسطبل الفرنسية', 'Alive',
-	 'سيف النصر', 'Saif Al Nasr', 'EG-2008-00912', 'Imported', '2008-03-11', 'Black', 'Arabian',
-	 'مسك', 'Misk', 'EG-2010-00318', 'Imported', '2010-06-23', 'Chestnut', 'Arabian',
-	 'خالد المصراتي', 'Khaled Al Misrati', '119790332211', '0913456789',
-	 'Misrata', 'Zawiyat Al Mahjoub', '2017-11-05',
-	 NULL, NULL, NULL, NULL, NULL,
-	 'Partially Completed')
-ON CONFLICT (registration_no) DO NOTHING;
+	(2, 'Najma', 'نجمة', NULL, 'ARABIAN', 'BROODMARE',
+	    'REGISTER_IN_STUDBOOK', 'BEAUTY',
+	    '22222222-2222-4222-8222-222222222222', '434002W00000002', 'AH-1002',
+	    NULL, '985101000100002', 'Saqlawi',
+	    '2017-04-02', '2019-02-14', '2017-10-05', '2017-05-01', NULL, true,
+	    3, 46, NULL,
+	    NULL, NULL, 1, NULL, 1, NULL, 2, 1),
 
--- ------------------------------------------------- child tables (optional)
--- Cleared first so a second run replaces these rows instead of doubling them.
-DELETE FROM ownership_log c USING horse h
-WHERE h.id = c.horse_id AND h.registration_no = 'LY-2026-00001';
+	(3, 'Nasim Al-Sahra', 'نسيم الصحراء', NULL, 'ARABIAN', 'MALE',
+	    'WAITING_FOR_LABORATORY', 'UNKNOWN',
+	    '33333333-3333-4333-8333-333333333333', NULL, NULL,
+	    NULL, '985101000100003', 'Kuhailan',
+	    '2025-03-18', NULL, '2025-06-20', '2025-04-02', NULL, false,
+	    NULL, NULL, 'Awaiting DNA parentage verification.',
+	    1, 2, 1, NULL, 1, NULL, 1, 1),
 
-INSERT INTO ownership_log (horse_id, owner_name_en, owner_national_id, from_date, to_date, idx)
-SELECT id, 'Ahmed Al Zwai', '119880776655', '2018-03-01', '2019-01-09', 1
-FROM horse WHERE registration_no = 'LY-2026-00001';
+	(4, 'Bint Misr', 'بنت مصر', 'EG', 'ARABIAN', 'BROODMARE',
+	    'REGISTER_IN_STUDBOOK', 'BEAUTY',
+	    '44444444-4444-4444-8444-444444444444', '818002W00000044', 'AH-2001',
+	    'EAO-7788', '985101000100004', 'Dahman',
+	    '2019-05-22', '2023-03-01', '2023-02-10', NULL, '2023-01-15', true,
+	    4, 12, 'Imported from Egypt in 2023.',
+	    NULL, NULL, 2, 2, 1, 2, 3, 1);
 
-INSERT INTO ownership_log (horse_id, owner_name_en, owner_national_id, from_date, to_date, idx)
-SELECT id, 'Mohamed Al Fituri', '119820451122', '2019-01-10', NULL, 2
-FROM horse WHERE registration_no = 'LY-2026-00001';
+INSERT INTO horse_owner (horse_id, owner_id) VALUES
+	(1, 1),
+	(2, 1),
+	(2, 3),   -- co-owned, which is what the M:N table is for
+	(3, 1),
+	(4, 2);
 
-DELETE FROM name_log c USING horse h
-WHERE h.id = c.horse_id AND h.registration_no = 'LY-2026-00001';
+INSERT INTO horse_breeder (horse_id, owner_id) VALUES
+	(3, 1),   -- the dam's owner at foaling
+	(4, 2);
 
-INSERT INTO name_log (horse_id, name_ar, name_en, changed_on, idx)
-SELECT id, 'وثبة', 'Wathba', '2018-06-01', 1
-FROM horse WHERE registration_no = 'LY-2026-00001';
+-- ------------------------------------------------------------------ events
+INSERT INTO event_type (id, type, description, selectable) VALUES
+	(1, 'CHANGE_OWNER',  'Ownership Change',      true),
+	(2, 'FOAL_ABORTION', 'Foal Abortion',         true),
+	(3, 'NEW_FOAL',      'New Foal Registration', true),
+	(4, 'DEATH',         'Death',                 true),
+	(5, 'IMPORT',        'Import',                true),
+	(6, 'EXPORT',        'Export',                true),
+	(7, 'GELDING',       'Gelding',               true),
+	(8, 'COVERED',       'Covered',               true);
 
--- --------------------------------------------------------- audit trail
--- Only worth writing for horses whose history you want to query. Each revision
--- is a row in revinfo plus a snapshot of the whole record in horse_aud.
---   revtype  0 = ADD  1 = MOD  2 = DEL
---
--- Cleared first, same reason as the child tables above.
-DELETE FROM horse_aud a USING horse h
-WHERE h.id = a.id AND h.registration_no = 'LY-2026-00001';
+INSERT INTO event (id, date, description, additional_information, cover, pregnant,
+                   twins, horse_sex, type_id, horse_primary_id, horse_secondary_id,
+                   horse_offspring_id, country_id) VALUES
+	(1, '2023-01-15', 'Imported from Egypt', 'Permit IMP-2023-0042',
+	    NULL, NULL, NULL, NULL, 5, 4, NULL, NULL, 2),
+	(2, '2024-06-01', 'Covered by Sahm Al-Sahra', NULL,
+	    true, true, false, NULL, 8, 2, 1, NULL, NULL),
+	(3, '2025-03-18', 'Colt foal born', NULL,
+	    NULL, NULL, false, 0, 3, 2, 1, 3, NULL),
+	(4, '2026-02-09', 'Sold at private treaty', 'Contract 2026/118',
+	    NULL, NULL, NULL, NULL, 1, 4, NULL, NULL, NULL);
 
--- Revision 1: the horse as first registered, living somewhere else.
-WITH r AS (
-	INSERT INTO revinfo (revtstmp) VALUES (extract(epoch FROM timestamp '2018-03-01') * 1000)
-	RETURNING rev
-)
-INSERT INTO horse_aud (rev, revtype, id, registration_no, name_ar, name_en,
-                       origin, gender, color, date_of_birth, current_location, life_status,
-                       owner_name_en, owner_national_id)
-SELECT r.rev, 0, h.id, h.registration_no, h.name_ar, h.name_en,
-       h.origin, h.gender, h.color, h.date_of_birth, 'إسطبل بنغازي', 'Alive',
-       'Ahmed Al Zwai', '119880776655'
-FROM horse h, r WHERE h.registration_no = 'LY-2026-00001';
+-- the change of owner on horse 4: from Fatima to the Sahara Arabians company
+INSERT INTO event_old_owner (event_id, owner_id) VALUES (4, 2);
+INSERT INTO event_new_owner (event_id, owner_id) VALUES (4, 3);
 
--- Revision 2: sold, and moved to where it is now.
-WITH r AS (
-	INSERT INTO revinfo (revtstmp) VALUES (extract(epoch FROM timestamp '2019-01-10') * 1000)
-	RETURNING rev
-)
-INSERT INTO horse_aud (rev, revtype, id, registration_no, name_ar, name_en,
-                       origin, gender, color, date_of_birth, current_location, life_status,
-                       owner_name_en, owner_national_id)
-SELECT r.rev, 1, h.id, h.registration_no, h.name_ar, h.name_en,
-       h.origin, h.gender, h.color, h.date_of_birth, h.current_location, h.life_status,
-       h.owner_name_en, h.owner_national_id
-FROM horse h, r WHERE h.registration_no = 'LY-2026-00001';
+-- ------------------------------------------------------------------- files
+INSERT INTO file (id, file_type, file_name, file_path, file_size, mime_type,
+                  document_type, is_avatar, horse_id) VALUES
+	(1, 'DOCUMENT', 'passport_bint_misr.pdf', '/studlib/files/4/passport.pdf',
+	    248123, 'application/pdf', 0, false, 4),
+	(2, 'PHOTO', 'sahm.jpg', '/studlib/files/1/sahm.jpg',
+	    91234, 'image/jpeg', 2, true, 1);
 
--- Read the trail back:
---   SELECT a.rev, a.revtype, a.current_location, a.owner_name_en,
---          to_timestamp(r.revtstmp / 1000)::date AS changed_on
---   FROM horse_aud a JOIN revinfo r USING (rev)
---   JOIN horse h ON h.id = a.id
---   WHERE h.registration_no = 'LY-2026-00001'
---   ORDER BY a.rev;
+-- ------------------------------------------------------------ audit trail
+-- Nothing fills these automatically -- there are no triggers in the sandbox.
+-- The revision row comes first, because horse_aud.rev is an FK to it.
+INSERT INTO revision_info (id, revision_timestamp, custom_timestamp, username,
+                           usern_fullname, ip_address) VALUES
+	(1, 1700000000000, '2023-11-14 22:13:20', 'vet@lsb.ly', 'Dr. Salem Ahmed', '10.0.0.5'),
+	(2, 1770000000000, '2026-02-09 09:20:00', 'vet@lsb.ly', 'Dr. Salem Ahmed', '10.0.0.5');
+
+INSERT INTO horse_aud (rev, revtype, id, name, local_name, breed, sex, status,
+                       uuid, registry_id, date_of_birth, birthplace_country_id,
+                       color_id) VALUES
+	-- 0 = ADD: horse 4 first appears
+	(1, 0, 4, 'Bint Misr', 'بنت مصر', 'ARABIAN', 'BROODMARE', 'NEW_IMPORTED',
+	    '44444444-4444-4444-8444-444444444444', NULL, '2019-05-22', 2, 3),
+	-- 1 = MOD: registered, and given its registry id
+	(2, 1, 4, 'Bint Misr', 'بنت مصر', 'ARABIAN', 'BROODMARE', 'REGISTER_IN_STUDBOOK',
+	    '44444444-4444-4444-8444-444444444444', 'AH-2001', '2019-05-22', 2, 3);
+
+INSERT INTO event_aud (rev, revtype, id, date, description, type_id,
+                       horse_primary_id) VALUES
+	(2, 0, 4, '2026-02-09', 'Sold at private treaty', 1, 4);
+
+INSERT INTO horse_owner_aud (rev, revtype, horse_id, owner_id) VALUES
+	(1, 0, 4, 2),
+	(2, 2, 4, 2);   -- 2 = DEL, the old owner comes off
+
+-- the identity columns were fed explicit ids above, so bring the sequences up
+SELECT setval('country_id_seq',          (SELECT max(id) FROM country));
+SELECT setval('horse_color_id_seq',      (SELECT max(id) FROM horse_color));
+SELECT setval('book_type_id_seq',        (SELECT max(id) FROM book_type));
+SELECT setval('laboratory_id_seq',       (SELECT max(id) FROM laboratory));
+SELECT setval('application_user_id_seq', (SELECT max(id) FROM application_user));
+SELECT setval('owner_id_seq',            (SELECT max(id) FROM owner));
+SELECT setval('horse_id_seq',            (SELECT max(id) FROM horse));
+SELECT setval('event_type_id_seq',       (SELECT max(id) FROM event_type));
+SELECT setval('event_id_seq',            (SELECT max(id) FROM event));
+SELECT setval('file_id_seq',             (SELECT max(id) FROM file));
+SELECT setval('revision_info_id_seq',    (SELECT max(id) FROM revision_info));
+
+COMMIT;

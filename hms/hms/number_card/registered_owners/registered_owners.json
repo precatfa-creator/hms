@@ -1,7 +1,7 @@
 {
  "aggregate_function_based_on": "",
  "color": "#449CF0",
- "creation": "2026-07-26 19:13:16.193898",
+ "creation": "2026-09-21 12:32:00.093093",
  "docstatus": 0,
  "doctype": "Number Card",
  "document_type": "Horse Owner",
@@ -12,7 +12,7 @@
  "is_public": 1,
  "is_standard": 1,
  "label": "Registered Owners",
- "modified": "2026-07-26 19:13:16.193898",
+ "modified": "2026-09-21 12:32:00.093093",
  "modified_by": "Administrator",
  "module": "HMS",
  "name": "Registered Owners",

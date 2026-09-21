@@ -2,7 +2,7 @@
  "actions": [],
  "allow_rename": 0,
  "autoname": "naming_series:",
- "creation": "2026-07-26 10:00:00.000000",
+ "creation": "2026-09-21 10:00:00.000000",
  "default_print_format": "Horse Transfer of Ownership Form",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -48,7 +48,8 @@
   "sec_legal",
   "legal_contract_officer",
   "col_legal",
-  "endorsement_date"
+  "endorsement_date",
+  "source_event"
  ],
  "fields": [
   {
@@ -125,7 +126,7 @@
    "fieldname": "color",
    "fieldtype": "Link",
    "label": "Color",
-   "options": "Color",
+   "options": "Horse Color",
    "read_only": 1
   },
   {
@@ -305,11 +306,19 @@
    "fieldname": "endorsement_date",
    "fieldtype": "Date",
    "label": "Endorsement Date"
+  },
+  {
+   "fieldname": "source_event",
+   "fieldtype": "Link",
+   "label": "From Event",
+   "no_copy": 1,
+   "options": "Horse Event",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-07-26 10:00:00.000000",
+ "modified": "2026-09-21 10:00:00.000000",
  "modified_by": "Administrator",
  "module": "HMS",
  "name": "Owner Change Form",

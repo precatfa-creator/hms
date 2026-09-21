@@ -1,7 +1,7 @@
-# Legacy studbook sandbox
+# StudLib sandbox
 
-A throwaway PostgreSQL standing in for the legacy studbook, so the Frappe
-bridge can be developed against something real before the actual system exists.
+A throwaway PostgreSQL carrying the StudLib schema, so the Frappe sync can be
+developed against something real before the actual system is reachable.
 
 It is a user-owned cluster created with `initdb` — no root, no Docker, and the
 system PostgreSQL on 5432 is never touched. Deleting `/home/omix/pgstudbook`
@@ -31,30 +31,60 @@ python3 check.py                # schema is complete and studbook_ro cannot writ
 `check.py` wants the bench interpreter, which already has psycopg2:
 `/home/omix/frappe-bench/env/bin/python check.py`
 
+Fill it with the sample data — four horses, three owners, four events:
+
+```bash
+PGPASSWORD=studbook_dev_pw /usr/lib/postgresql/16/bin/psql \
+	-h 127.0.0.1 -p 5433 -U studbook_app -d studbook_legacy \
+	-f sample_data.sql
+```
+
+It truncates first, so a second run replaces its rows rather than doubling
+them.
+
 ## Schema
 
-`schema.sql` is the whole definition. Tables are empty by design — fill them by
-hand.
+`schema.sql` is the whole definition. Column names, types and enum values come
+straight from `docs/Database_Specification_1.01.pdf`, including the CHECK
+constraints on the breed, sex and status enums and the partial unique index
+that allows exactly one `local` country.
 
-`horse` carries the identity, pedigree, owner and breeder columns, named to
-match the Frappe `Horse` fieldnames so the bridge can select them without
-aliasing. `horse_owner` is the owner directory; `ownership_log` and `name_log`
-are the child-table equivalents.
+It is a **subset** — the tables HMS actually reads, plus enough audit
+scaffolding to prove the shape:
+
+| Group | Tables |
+| ----- | ------ |
+| Core | `horse`, `country`, `city`, `book_type`, `horse_color` |
+| Ownership | `owner`, `horse_owner`, `horse_breeder` |
+| Events | `event`, `event_type`, `event_old_owner`, `event_new_owner` |
+| Files | `file` |
+| Supporting | `application_user`, `laboratory` |
+| Views | `vhorse`, `vhorse_event` |
+
+Left out because nothing here reads them: `covering_agreement`,
+`covering_certificate`, `covering_result`, `season`, `laboratory_test*`, the
+~24 horse marking collection tables, `refresh_token`, `token_blacklist`,
+`email_log`, `forbidden_name`, `studbook_generation_task`.
+
+A horse is identified by `uuid`, not `registry_id` — an unregistered foal has
+no registry id yet, which is why `sample_data.sql` ships one.
 
 The audit side follows Hibernate Envers defaults: every audited table has a
 `_aud` twin holding `rev` and `revtype` beside the mirrored columns, and one
-`revinfo` table holds the revision clock.
+`revision_info` table holds the revision clock.
 
 ```
-revtype   0 = ADD   1 = MOD   2 = DEL
-revtstmp  epoch milliseconds
+revtype            0 = ADD   1 = MOD   2 = DEL
+revision_timestamp epoch milliseconds
+custom_timestamp   the readable one
 ```
 
 Filling `_aud` rows by hand is only worth it for horses whose history you want
-to test against; current-state reads never look at them.
+to test against; neither the sync nor the event poll reads them.
 
-## Caveat
+## Grants
 
-The column names here are a guess at what the real system will use. When its
-DDL turns up, the aliases needed to absorb the difference belong in the
-bridge's SELECT statements — one place, nothing downstream of it moves.
+`./pg.sh reset` drops and recreates the tables, which takes their privileges
+with them. `schema.sql` re-grants `SELECT` to `studbook_ro` at the end, so a
+reset cannot lock the sync out. Adding a table by hand means granting it
+yourself, or just running `reset` again.

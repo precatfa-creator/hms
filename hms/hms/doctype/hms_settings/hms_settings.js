@@ -7,6 +7,9 @@ frappe.ui.form.on("HMS Settings", {
 		// and a highlighted item inside one reads as a mistake
 		frm.add_custom_button(__("Test Connection"), () => test_connection(frm));
 		frm.add_custom_button(__("Sync Horses Now"), () => confirm_sync(frm));
+		if (frm.doc.events_enabled) {
+			frm.add_custom_button(__("Poll Events Now"), () => poll_events(frm));
+		}
 
 		show_last_sync(frm);
 		show_schedule(frm);
@@ -115,4 +118,23 @@ function show_last_sync(frm) {
 		]),
 		colours[frm.doc.last_sync_outcome] || "blue"
 	);
+}
+
+function poll_events(frm) {
+	frappe.call({ method: "hms.api.events.poll_events", freeze: true }).then((r) => {
+		const result = r.message;
+		if (!result) return;
+		frappe.msgprint({
+			title: __("Studbook Events"),
+			indicator: "green",
+			message:
+				result.message ||
+				__("{0} new, {1} already here, up to event {2}.", [
+					result.created,
+					result.skipped,
+					result.last_event_id,
+				]),
+		});
+		frm.reload_doc();
+	});
 }

@@ -2,15 +2,32 @@
 
 import frappe
 
-from hms.hms.documents import DOC_COMPANIONS, REQUIRED
+from hms.hms import documents
 
-COLORS = {"Grey": "#B2BEB5", "Bay": "#7B3F00", "Black": "#000000", "Chestnut": "#954535"}
+SHORT_NAMES = {"Grey": "gr.", "Bay": "b.", "Black": "bl.", "Chestnut": "ch."}
 
 
-def ensure_color(name="Bay"):
-	if not frappe.db.exists("Color", name):
-		frappe.get_doc({"doctype": "Color", "name": name, "color": COLORS.get(name, "#000000")}).insert()
+def ensure_country(name="Libya", is_local=True):
+	if not frappe.db.exists("Studbook Country", name):
+		frappe.get_doc({
+			"doctype": "Studbook Country", "country_name": name,
+			"alpha2": name[:2].upper(), "alpha3": name[:3].upper(),
+			"numeric_code": str(abs(hash(name)) % 900 + 100),
+			"is_local": 1 if is_local else 0,
+		}).insert()
 	return name
+
+
+def ensure_color(name="Bay", breed="Arabian"):
+	"""Horse Color is named "<color> (<breed>)": colors repeat per breed."""
+	docname = f"{name} ({breed})"
+	if not frappe.db.exists("Horse Color", docname):
+		frappe.get_doc({
+			"doctype": "Horse Color", "color_name": name,
+			"short_name": SHORT_NAMES.get(name, name[:2].lower() + "."),
+			"horse_breed": breed,
+		}).insert()
+	return docname
 
 
 def owner(prefix="owner", name_en="Test Owner"):
@@ -49,27 +66,39 @@ def pedigree():
 	}
 
 
-def documents(*keys):
-	"""Fully filled document fields for the given document keys."""
-	values = {}
-	for key in keys:
-		values[f"doc_{key}"] = "/files/test.pdf"
-		for field in DOC_COMPANIONS[key]:
-			values[field] = "2026-01-01" if field.endswith("_date") else "test"
-	if "dna_card" in keys:
-		values["doc_dna_status"] = "Approved"
-	return values
+def add_document(horse, category, **kwargs):
+	"""One Horse Document, with whatever details its category asks for."""
+	values = {
+		"doctype": "Horse Document",
+		"horse": horse.name if hasattr(horse, "name") else horse,
+		"category": category,
+		"attachment": "/files/test.pdf",
+	}
+	rules = documents.get_category(category) or {}
+	for flag, field in documents.COMPANIONS.items():
+		if not rules.get(flag):
+			continue
+		if field == "doc_status":
+			values[field] = "Approved"
+		elif field.endswith("date"):
+			values[field] = "2026-01-01"
+		else:
+			values[field] = "test"
+	values.update(kwargs)
+	return frappe.get_doc(values).insert()
 
 
-def make_horse(name_en="Test Horse", gender="Male", **kwargs):
+def make_horse(name_en="Test Horse", gender="Male", origin="Local", **kwargs):
+	"""Origin is derived from the birthplace country, so that is what is set."""
 	values = {
 		"doctype": "Horse",
 		"name_ar": "جواد تجريبي",
 		"name_en": name_en,
 		"gender": gender,
-		"origin": "Local",
-		"color": ensure_color(),
 		"breed": "Arabian",
+		"birthplace_country": ensure_country("Libya", True) if origin == "Local"
+		else ensure_country("Egypt", False),
+		"color": ensure_color(),
 		"date_of_birth": "2015-03-01",
 		"place_of_birth": "Tripoli",
 	}
@@ -79,9 +108,17 @@ def make_horse(name_en="Test Horse", gender="Male", **kwargs):
 
 
 def complete_documents(horse):
-	"""Attach every starred document of the horse's origin, so its status is Completed."""
-	horse.update(documents(*REQUIRED[horse.origin or "Local"]))
-	horse.save()
+	"""Add every starred document this horse needs, so it reads as Completed."""
+	values = horse.as_dict()
+	for category in documents.get_categories():
+		name = category["category"]
+		if not documents.is_required(category, values):
+			continue
+		if frappe.db.exists("Horse Document", {"horse": horse.name, "category": name}):
+			# already added by the test; adding a second would hit max_count
+			continue
+		add_document(horse, name)
+	horse.reload()
 	return horse
 
 

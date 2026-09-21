@@ -21,6 +21,13 @@ OWNER = "Horse Owner"
 REG = "Registration Form for Local Horses"
 OCF = "Owner Change Form"
 NCF = "Name Change Form"
+DOCUMENT = "Horse Document"
+CATEGORY = "Horse Document Category"
+EVENT = "Horse Event"
+EVENT_TYPE = "Horse Event Type"
+COLOR = "Horse Color"
+COUNTRY = "Studbook Country"
+BOOK = "Book Type"
 
 
 def write(kind, name, doc):
@@ -53,11 +60,12 @@ def filters(*conditions):
 CARDS = [
 	("Total Horses", HORSE, "[]", "#449CF0"),
 	("Living Horses", HORSE, filters((HORSE, "life_status", "=", "Alive")), "#29CD42"),
-	("Documents Completed", HORSE, filters((HORSE, "status", "=", "Completed")), "#29CD42"),
-	("Documents Incomplete", HORSE, filters((HORSE, "status", "!=", "Completed")), "#ECAD4B"),
+	("Documents Completed", HORSE, filters((HORSE, "documents_status", "=", "Completed")), "#29CD42"),
+	("Documents Incomplete", HORSE, filters((HORSE, "documents_status", "!=", "Completed")), "#ECAD4B"),
 	("Imported Horses", HORSE, filters((HORSE, "origin", "=", "Imported")), "#7575FF"),
 	("Registered Owners", OWNER, "[]", "#449CF0"),
 	("Registration Forms", REG, "[]", "#ECAD4B"),
+	("New Events", EVENT, filters((EVENT, "notification_status", "=", "New")), "#FF5858"),
 	("Owner Change Forms", OCF, "[]", "#CB2929"),
 	("Name Change Forms", NCF, "[]", "#CB2929"),
 ]
@@ -86,7 +94,7 @@ for label, doctype, filters_json, color in CARDS:
 # --------------------------------------------------------------------------
 GROUP_BY_CHARTS = [
 	("Horses by Color", HORSE, "color", "Donut", "[]"),
-	("Horses by Documents Status", HORSE, "status", "Bar", "[]"),
+	("Horses by Documents Status", HORSE, "documents_status", "Bar", "[]"),
 	("Horses by Origin", HORSE, "origin", "Pie", "[]"),
 	("Horses by Sex", HORSE, "gender", "Pie", filters((HORSE, "life_status", "=", "Alive"))),
 ]
@@ -148,6 +156,8 @@ for name, doctype, based_on, chart_type, filters_json in TIMESERIES_CHARTS:
 SHORTCUTS = [
 	(HORSE, "Blue", '{"life_status":["=","Alive"]}', "{} Alive"),
 	(OWNER, "Grey", None, None),
+	(EVENT, "Red", '{"notification_status":["=","New"]}', "{} New"),
+	(DOCUMENT, "Purple", None, None),
 	(REG, "Orange", None, None),
 	(OCF, "Green", None, None),
 	(NCF, "Green", None, None),
@@ -163,8 +173,11 @@ for label, color, stats_filter, fmt in SHORTCUTS:
 
 LINK_CARDS = [
 	("Registry", [HORSE, OWNER]),
+	("Documents", [DOCUMENT, CATEGORY]),
+	("Events", [EVENT, EVENT_TYPE]),
 	("Forms", [REG, OCF, NCF]),
-	("Setup", ["Print Format"]),
+	("Studbook Data", [COUNTRY, COLOR, BOOK]),
+	("Setup", ["HMS Settings", "Print Format"]),
 ]
 
 links = []

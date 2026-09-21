@@ -35,12 +35,21 @@ class TestRegistrationFormforLocalHorses(FrappeTestCase):
 		self.assertEqual(reg.horse, horse.name)
 
 	def test_documents_and_status_belong_to_the_horse(self):
+		"""Documents are Horse Document rows now, not fields on either doctype."""
 		reg = make_registration()
 		horse = make_horse("Documented Horse")
-		self.assertTrue(horse.meta.has_field("doc_registration_form"))
-		self.assertTrue(horse.meta.has_field("status"))
-		self.assertFalse(reg.meta.has_field("doc_registration_form"))
-		self.assertFalse(reg.meta.has_field("status"))
+		self.assertTrue(horse.meta.has_field("documents_status"))
+		self.assertFalse(horse.meta.has_field("doc_registration_form"))
+		self.assertFalse(reg.meta.has_field("documents_status"))
+
+		document = frappe.get_doc({
+			"doctype": "Horse Document", "horse": horse.name,
+			"category": "Registration Form", "attachment": "/files/test.pdf",
+			"document_date": "2026-01-01",
+		}).insert()
+		self.assertEqual(document.horse, horse.name)
+		horse.reload()
+		self.assertEqual(horse.documents_status, "Partially Completed")
 
 	def test_print_format_renders(self):
 		reg = make_registration()

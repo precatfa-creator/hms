@@ -1,44 +1,80 @@
 # Studbook Sync
 
-How horses get from the legacy studbook database into this Frappe site, how to
+How horses get from the StudLib studbook database into this Frappe site, how to
 run and schedule it, and how to keep the development sandbox alive.
+
+Documents and events are in [documents-and-events.md](documents-and-events.md).
 
 ---
 
 ## What this is
 
-The studbook is the system of record for horses: identity, pedigree, ownership.
-It is a PostgreSQL database with Hibernate Envers audit tables. Frappe holds the
-same horses plus the things the studbook knows nothing about — scanned
-documents, completion status, the registration and change forms.
+StudLib is the system of record for horses: identity, pedigree, ownership.
+It is a PostgreSQL database with Hibernate Envers audit tables, described in
+`docs/Database_Specification_1.01.pdf`. Frappe holds the same horses plus the
+things StudLib knows nothing about — scanned documents, completion status, the
+registration and change forms.
 
-The sync reads the studbook and writes Horses. It never writes back. Roughly:
+The sync reads StudLib and writes Horses. It never writes back.
 
 ```
-PostgreSQL                 hms/api/legacy_sync.py                 Frappe
-  horse            ──▶  read-only SELECT, upsert by  ──▶  Horse
-  ownership_log         registration number                Horse Ownership Log
-  name_log                                                 Horse Name Log
+PostgreSQL                    hms/api/legacy_sync.py               Frappe
+  country, horse_color   ──▶  mirrored first, so the        ──▶  Studbook Country
+  book_type, owner            Horse has something to Link        Horse Color
+                              at                                 Book Type
+                                                                 Horse Owner
+
+  horse + its joins      ──▶  read-only SELECT, upsert      ──▶  Horse
+  horse_owner                 keyed on the studbook uuid         Horse Party
+  horse_breeder                                                  (owners, breeders)
 ```
 
-The real studbook does not exist yet, so a sandbox Postgres stands in for it.
-Everything below applies unchanged when the real one arrives: point HMS Settings
-at it and, if its column names differ, adjust the `COLUMNS` map in
-`hms/api/legacy_sync.py`.
+**The key is `uuid`, not the registry number.** A foal exists in StudLib as
+`NEW_FOAL` long before it is given a `registry_id`, so the registry number
+cannot identify a horse. `Horse.studbook_uuid` carries StudLib's `uuid` and is
+what a second run matches on; the docname stays a naming series.
+
+The real studbook is not reachable yet, so a sandbox Postgres carrying the same
+schema stands in for it. Everything below applies unchanged when the real one
+arrives: point HMS Settings at it.
 
 ### Who owns what
 
 This is the rule that makes the sync safe to run repeatedly.
 
-| The studbook owns                           | Frappe owns                              |
-| ------------------------------------------- | ---------------------------------------- |
-| names, UELN, microchip, origin, sex, colour  | every `doc_*` attachment and its dates   |
-| breed, dates and places of birth, location   | `status` (derived from the documents)    |
-| life status, sire and dam blocks             | `registration_form` link                 |
-| owner and breeder blocks                     |                                          |
-| ownership and name history tables            |                                          |
+| StudLib owns                                      | Frappe owns                          |
+| ------------------------------------------------- | ------------------------------------ |
+| names, UELN, registry ids, microchip, sex, colour  | every Horse Document                 |
+| breed, strain, classification, `status`            | `documents_status`                   |
+| all seven dates, studbook volume and page          | the paper forms                      |
+| sire and dam, owners and breeders                  | Horse Events after they are created  |
+| birthplace, import and export country              |                                      |
 
-The sync only writes the left column. A re-sync cannot cost anyone an upload.
+The sync only writes the left column; `FRAPPE_OWNED` in `legacy_sync.py` names
+the exceptions. A re-sync cannot cost anyone an upload.
+
+### Two fields that are not what they look like
+
+| Field | What it is |
+| ----- | ---------- |
+| `status` | StudLib's **registration workflow** — New Foal, Waiting for Laboratory, Register in Studbook, Rejected, External. It used to hold our document tally; that moved to `documents_status`. |
+| `origin` | Derived, not stored. StudLib has no origin column: a horse whose birthplace country is flagged `Local` is Local, anything else is Imported. Read-only on the form. |
+
+Likewise `life_status` is derived from `date_of_death`.
+
+### The two deliberate aliases
+
+StudLib's `name` is the official registered name and `local_name` is the local
+spelling. Frappe uses `name` for the docname, and the whole app — print formats,
+paper forms, the type-ahead — is built on `name_en` / `name_ar`. So:
+
+| StudLib      | Horse     |
+| ------------ | --------- |
+| `name`       | `name_en` |
+| `local_name` | `name_ar` |
+
+Every other column carries its StudLib name. `COLUMNS` in
+`hms/api/legacy_sync.py` is the whole map.
 
 ---
 
@@ -49,7 +85,8 @@ The sync only writes the left column. A re-sync cannot cost anyone an upload.
 `Test Connection` reads a row count and nothing else. Use it after changing any
 connection detail — it fails in a second, where a sync would make you wait.
 
-`Sync Horses Now` reads every horse and reports what it did:
+`Sync Horses Now` mirrors the reference tables, then reads every horse and
+reports what it did:
 
 | Count       | Meaning                                                     |
 | ----------- | ----------------------------------------------------------- |
@@ -58,9 +95,14 @@ connection detail — it fails in a second, where a sync would make you wait.
 | Unchanged   | already here, nothing to do                                  |
 | Failed      | that horse errored; the rest still synced                    |
 
-**Running it twice is safe.** The legacy registration number is the Horse's
-docname, so the second run finds every horse and updates rather than duplicating.
-A run that changes nothing reports everything as Unchanged.
+**Running it twice is safe.** The second run finds every horse by its
+`studbook_uuid` and updates rather than duplicating. A run that changes nothing
+reports everything as Unchanged.
+
+Sire and dam are resolved in a second pass, because a foal can be read before
+its parents are in the site. A parent StudLib does not hold — a foreign sire,
+say — stays in the flat `sire_*` / `dam_*` block with no Link, which is what
+those fields are still there for.
 
 An `Outcome` of `Partial` means some horses failed and some succeeded. The first
 five failures are named in the message; the rest are in **Error Log**.
@@ -191,14 +233,15 @@ connection and fails with *No active connection*. Either pick the database from
 the toolbar dropdown first, or open scripts by right-clicking the connection →
 `SQL Editor` → `New SQL script`.
 
-Only the required columns need filling: `registration_no`, `name_ar`, `name_en`,
-`origin`, `gender`. Everything else is optional.
+A horse's NOT NULL columns are `name`, `breed`, `sex`, `status` and `uuid`;
+everything else is optional. `breed`, `sex` and `status` carry CHECK
+constraints, so a typo is rejected rather than synced.
 
 ### Browsing it
 
 In DBeaver, double-click a table and use the **Data** tab — Properties shows the
-schema, not the rows. `horse` has 47 columns, so press **Tab** to switch the grid
-to record view.
+schema, not the rows. `horse` is wide, so press **Tab** to switch the grid to
+record view.
 
 From a terminal:
 
@@ -209,42 +252,45 @@ From a terminal:
 \dt                list tables
 \d horse           columns
 \x on              vertical output, worth it for horse
-SELECT registration_no, name_en, current_location FROM horse;
+SELECT registry_id, name, sex, status FROM horse;
+SELECT * FROM vhorse;          -- origin LOCAL/IMPORTED, colour name, offspring
 ```
 
 ---
 
 ## The audit tables
 
-The studbook keeps history the way Hibernate Envers does: every audited table
-has a `_aud` twin, and one `revinfo` table holds the revision clock.
+StudLib keeps history the way Hibernate Envers does: every audited table has a
+`_aud` twin, and one `revision_info` table holds the revision clock.
 
 ```
-revtype   0 = ADD   1 = MOD   2 = DEL
-revtstmp  epoch milliseconds
+revtype            0 = ADD   1 = MOD   2 = DEL
+revision_timestamp epoch milliseconds
+custom_timestamp   the readable one, indexed DESC
 ```
 
 Reading one horse's history:
 
 ```sql
-SELECT a.rev, a.revtype, a.current_location, a.owner_name_en,
-       to_timestamp(r.revtstmp / 1000)::date AS changed_on
+SELECT a.rev, a.revtype, a.status, a.registry_id, r.custom_timestamp, r.username
 FROM horse_aud a
-JOIN revinfo r USING (rev)
+JOIN revision_info r ON r.id = a.rev
 JOIN horse h ON h.id = a.id
-WHERE h.registration_no = 'LY-2026-00001'
+WHERE h.registry_id = 'AH-2001'
 ORDER BY a.rev;
 ```
 
-**The sync does not read these tables.** It takes current state from `horse`,
-and the ownership and name history from `ownership_log` and `name_log`, which
-are ordinary tables. The `_aud` tables are there because the real studbook will
-have them.
+**Neither the sync nor the event poll reads these tables.** Current state comes
+from `horse`, ownership from `horse_owner` and `horse_breeder`, and new events
+from `event`. The `_aud` tables are mirrored here because the real studbook has
+them, and because they are the only place an *edited* or *deleted* event would
+show up — see the limitation noted in
+[documents-and-events.md](documents-and-events.md).
 
 Nothing fills `_aud` automatically in the sandbox — no triggers. Inserting into
 `horse` by hand leaves `horse_aud` empty, which is fine unless you are testing
-history. `sample_data.sql` shows the pattern: a `revinfo` row first, because
-`horse_aud.rev` is a foreign key to it.
+history. `sample_data.sql` shows the pattern: a `revision_info` row first,
+because `horse_aud.rev` is a foreign key to it.
 
 ---
 
@@ -253,6 +299,8 @@ history. `sample_data.sql` shows the pattern: a `revinfo` row first, because
 | Path                                             | What                                  |
 | ------------------------------------------------ | ------------------------------------- |
 | `hms/api/legacy_sync.py`                         | the sync, the cron logic, `COLUMNS`   |
+| `hms/api/events.py`                              | the event poll and its watermark      |
+| `scripts/gen_doctypes.py`                        | every doctype JSON is generated here  |
 | `hms/hms/doctype/hms_settings/`                  | the settings single doctype           |
 | `hms/hms/doctype/studbook_sync_log/`             | one row of sync history               |
 | `hms/hooks.py`                                   | registers the scheduled job           |
@@ -264,8 +312,9 @@ history. `sample_data.sql` shows the pattern: a `revinfo` row first, because
 Both are System Manager only.
 
 ```python
-hms.api.legacy_sync.test_connection()  # {"horses": 2}
+hms.api.legacy_sync.test_connection()  # {"horses": 4}
 hms.api.legacy_sync.sync_horses()      # counts and outcome
+hms.api.events.poll_events()           # new events, and the watermark reached
 ```
 
 ---
@@ -273,9 +322,13 @@ hms.api.legacy_sync.sync_horses()      # counts and outcome
 ## When the real studbook arrives
 
 1. Fill its host, database and read-only user into HMS Settings.
-2. If its column names differ from the sandbox, edit `COLUMNS` in
-   `hms/api/legacy_sync.py`. That map is the only place the names appear.
-3. `Test Connection`, then `Sync Horses Now` on a copy of the site first.
+2. `Test Connection`, then `Sync Horses Now` on a copy of the site first.
+3. Then turn on **Poll Studbook Events**, leaving *Backfill Past Events* off
+   unless you want a notification for every event in the system's history.
+
+The sandbox schema is taken from the specification, so `COLUMNS`, `HORSE_SQL`
+and `PARTIES_SQL` should need no edits. If the real database differs, those
+three are the only places the column names appear.
 
 Ask for a **read-only** database user. The sync never writes, and a role that
 cannot write is a guarantee rather than a promise.

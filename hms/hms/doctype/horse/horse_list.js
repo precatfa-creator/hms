@@ -5,6 +5,6 @@ frappe.listview_settings["Horse"] = {
 			"Partially Completed": "orange",
 			"Completed": "green",
 		};
-		return [__(doc.status), colors[doc.status] || "grey", "status,=," + doc.status];
+		return [__(doc.documents_status), colors[doc.documents_status] || "grey", "documents_status,=," + doc.documents_status];
 	},
 };
