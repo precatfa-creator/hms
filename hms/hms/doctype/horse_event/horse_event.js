@@ -31,10 +31,13 @@ function set_status(frm, status) {
 function create(frm) {
 	frm.call({ doc: frm.doc, method: "create_transaction", freeze: true }).then((r) => {
 		if (!r.message) return;
-		const made = Object.entries(r.message)
-			.map(([kind, name]) => `${kind}: ${name}`)
-			.join(", ");
-		frappe.show_alert({ message: __("Created {0}", [made]), indicator: "green" });
+		const links = Object.values(r.message).map(([doctype, name]) => {
+			const url = frappe.utils.get_form_link(doctype, name);
+			// the browser may block a second tab; the alert links it either way
+			window.open(url, "_blank");
+			return `<a href="${url}" target="_blank">${doctype} ${name}</a>`;
+		});
+		frappe.show_alert({ message: __("Created {0}", [links.join(", ")]), indicator: "green" });
 		frm.reload_doc();
 	});
 }

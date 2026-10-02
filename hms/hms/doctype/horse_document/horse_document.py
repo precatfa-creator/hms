@@ -4,6 +4,7 @@
 import frappe
 from frappe import _
 from frappe.model.document import Document
+from frappe.utils import getdate
 
 from hms.hms import documents
 
@@ -24,12 +25,13 @@ class HorseDocument(Document):
 
 		self.check_limit(category)
 		self.clear_unused_details(category)
+		self.validate_season()
 		self.is_complete = 1 if documents.document_is_complete(self.as_dict(), category) else 0
 
 	def horse_values(self):
 		return frappe.db.get_value(
 			"Horse", self.horse,
-			["origin", "gender", "breed", "birthplace_country"], as_dict=True,
+			["origin", "gender", "birthplace_country"], as_dict=True,
 		) or {}
 
 	def check_limit(self, category):
@@ -54,6 +56,14 @@ class HorseDocument(Document):
 		for flag, field in documents.COMPANIONS.items():
 			if field != "notes" and not category.get(flag):
 				self.set(field, None)
+
+	def validate_season(self):
+		if not self.season:
+			return
+		self.season = self.season.strip()
+		if not (self.season.isdigit() and len(self.season) == 4
+		        and 1900 <= int(self.season) <= getdate().year + 1):
+			frappe.throw(_("Season must be a year, e.g. {0}").format(getdate().year))
 
 	def on_update(self):
 		documents.recalculate(self.horse)

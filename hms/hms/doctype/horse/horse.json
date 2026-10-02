@@ -2,7 +2,7 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "naming_series:",
- "creation": "2026-09-21 10:00:00.000000",
+ "creation": "2026-09-21 10:00:00",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
@@ -12,43 +12,29 @@
   "sec_names",
   "name_en",
   "name_ar",
-  "name_suffix",
   "col_identity",
-  "breed",
   "gender",
   "horse_classification",
-  "status",
   "col_documents",
   "documents_status",
   "origin",
   "sec_registry",
   "registry_id",
-  "previous_registry_id",
   "ueln_no",
   "col_registry",
-  "legacy_registry_id",
-  "legacy_ueln",
   "studbook_uuid",
   "studbook_id",
   "sec_transponder",
   "microchip_no",
-  "second_microchip_no",
-  "transponder_site",
   "col_transponder",
   "color",
-  "strain",
-  "blood_code",
-  "dna_sample_exists",
   "sec_birth",
   "date_of_birth",
   "birthplace_country",
-  "place_of_birth",
   "date_of_declaration",
   "col_life",
   "date_of_death",
   "life_status",
-  "current_location",
-  "notification_date",
   "sec_control",
   "date_of_control",
   "col_control",
@@ -61,46 +47,14 @@
   "export_country",
   "sec_notes",
   "notes",
-  "studbook_tab",
-  "sec_current_book",
-  "date_of_registration",
-  "book_type",
-  "book_number",
-  "book_page",
-  "book_appendix_number",
-  "col_previous_book",
-  "previous_book_type",
-  "previous_book_number",
-  "previous_book_page",
-  "previous_book_appendix_number",
   "pedigree_tab",
-  "sec_parents",
-  "sire",
-  "col_dam_link",
-  "dam",
   "sec_sire",
-  "sire_name_ar",
   "sire_name_en",
-  "sire_registration_no",
   "col_sire_origin",
-  "sire_origin",
-  "sire_date_of_birth",
-  "sire_place_of_birth",
-  "col_sire_description",
-  "sire_color",
-  "sire_breed",
   "sire_microchip_no",
   "sec_dam",
-  "dam_name_ar",
   "dam_name_en",
-  "dam_registration_no",
   "col_dam_origin",
-  "dam_origin",
-  "dam_date_of_birth",
-  "dam_place_of_birth",
-  "col_dam_description",
-  "dam_color",
-  "dam_breed",
   "dam_microchip_no",
   "ownership_tab",
   "sec_owners",
@@ -110,20 +64,15 @@
   "sec_owner",
   "owner_name_ar",
   "owner_name_en",
-  "owner_national_id",
   "col_owner_contact",
   "owner_phone",
   "owner_city",
-  "owner_address",
-  "owner_since",
   "sec_breeder",
   "breeder_name_ar",
   "breeder_name_en",
-  "breeder_national_id",
   "col_breeder_contact",
   "breeder_phone",
   "breeder_city",
-  "breeder_address",
   "sec_history",
   "ownership_history",
   "name_history"
@@ -141,7 +90,7 @@
    "hidden": 1,
    "label": "Series",
    "no_copy": 1,
-   "options": "LY-.YYYY.-.#####\n",
+   "options": "LY-.YYYY.-.#####",
    "print_hide": 1,
    "reqd": 1,
    "set_only_once": 1
@@ -168,23 +117,8 @@
    "reqd": 1
   },
   {
-   "description": "Appended when several horses share a name.",
-   "fieldname": "name_suffix",
-   "fieldtype": "Data",
-   "label": "Name Suffix",
-   "length": 10
-  },
-  {
    "fieldname": "col_identity",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "breed",
-   "fieldtype": "Select",
-   "in_standard_filter": 1,
-   "label": "Breed",
-   "options": "\nArabian\nThoroughbred",
-   "reqd": 1
   },
   {
    "fieldname": "gender",
@@ -202,13 +136,6 @@
    "options": "\nRacing\nJumping\nBeauty\nUnknown"
   },
   {
-   "fieldname": "status",
-   "fieldtype": "Select",
-   "in_standard_filter": 1,
-   "label": "Registration Status",
-   "options": "\nNew Foal\nNew Imported\nWaiting for Marking Data\nWaiting for Laboratory\nLaboratory Data Entered\nRegister in Studbook\nRejected\nExternal"
-  },
-  {
    "fieldname": "col_documents",
    "fieldtype": "Column Break"
   },
@@ -216,8 +143,6 @@
    "default": "Not Yet",
    "fieldname": "documents_status",
    "fieldtype": "Select",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
    "label": "Documents",
    "no_copy": 1,
    "options": "Not Yet\nPartially Completed\nCompleted",
@@ -240,12 +165,9 @@
   {
    "fieldname": "registry_id",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Registry ID"
-  },
-  {
-   "fieldname": "previous_registry_id",
-   "fieldtype": "Data",
-   "label": "Previous Registry ID"
   },
   {
    "description": "StudLib <code>ueln</code>.",
@@ -257,17 +179,6 @@
   {
    "fieldname": "col_registry",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "legacy_registry_id",
-   "fieldtype": "Data",
-   "label": "Legacy Registry ID"
-  },
-  {
-   "fieldname": "legacy_ueln",
-   "fieldtype": "Data",
-   "label": "Legacy UELN",
-   "length": 15
   },
   {
    "description": "The StudLib <code>uuid</code>. This is what the sync keys on.",
@@ -296,18 +207,10 @@
    "description": "StudLib <code>transponder_code</code>.",
    "fieldname": "microchip_no",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Microchip No",
    "length": 15
-  },
-  {
-   "fieldname": "second_microchip_no",
-   "fieldtype": "Data",
-   "label": "Second Microchip No"
-  },
-  {
-   "fieldname": "transponder_site",
-   "fieldtype": "Data",
-   "label": "Transponder Site"
   },
   {
    "fieldname": "col_transponder",
@@ -318,24 +221,6 @@
    "fieldtype": "Link",
    "label": "Color",
    "options": "Horse Color"
-  },
-  {
-   "depends_on": "eval:doc.breed=='Arabian'",
-   "description": "Arabian strain, e.g. Kuhailan, Saqlawi, Dahman.",
-   "fieldname": "strain",
-   "fieldtype": "Data",
-   "label": "Strain"
-  },
-  {
-   "fieldname": "blood_code",
-   "fieldtype": "Data",
-   "label": "Blood Code"
-  },
-  {
-   "default": "0",
-   "fieldname": "dna_sample_exists",
-   "fieldtype": "Check",
-   "label": "DNA Sample Collected"
   },
   {
    "fieldname": "sec_birth",
@@ -352,11 +237,6 @@
    "fieldtype": "Link",
    "label": "Birthplace Country",
    "options": "Studbook Country"
-  },
-  {
-   "fieldname": "place_of_birth",
-   "fieldtype": "Data",
-   "label": "Place of Birth"
   },
   {
    "fieldname": "date_of_declaration",
@@ -381,16 +261,6 @@
    "label": "Status of Life",
    "options": "Alive\nDeceased",
    "read_only": 1
-  },
-  {
-   "fieldname": "current_location",
-   "fieldtype": "Data",
-   "label": "Current Location"
-  },
-  {
-   "fieldname": "notification_date",
-   "fieldtype": "Date",
-   "label": "Notification Date"
   },
   {
    "fieldname": "sec_control",
@@ -452,93 +322,9 @@
    "label": "Notes"
   },
   {
-   "fieldname": "studbook_tab",
-   "fieldtype": "Tab Break",
-   "label": "Studbook"
-  },
-  {
-   "fieldname": "sec_current_book",
-   "fieldtype": "Section Break",
-   "label": "Current Studbook"
-  },
-  {
-   "fieldname": "date_of_registration",
-   "fieldtype": "Date",
-   "label": "Date of Registration"
-  },
-  {
-   "fieldname": "book_type",
-   "fieldtype": "Link",
-   "label": "Book Type",
-   "options": "Book Type"
-  },
-  {
-   "fieldname": "book_number",
-   "fieldtype": "Int",
-   "label": "Volume"
-  },
-  {
-   "fieldname": "book_page",
-   "fieldtype": "Int",
-   "label": "Page"
-  },
-  {
-   "fieldname": "book_appendix_number",
-   "fieldtype": "Int",
-   "label": "Appendix"
-  },
-  {
-   "fieldname": "col_previous_book",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "previous_book_type",
-   "fieldtype": "Link",
-   "label": "Previous Book Type",
-   "options": "Book Type"
-  },
-  {
-   "fieldname": "previous_book_number",
-   "fieldtype": "Int",
-   "label": "Previous Volume"
-  },
-  {
-   "fieldname": "previous_book_page",
-   "fieldtype": "Int",
-   "label": "Previous Page"
-  },
-  {
-   "fieldname": "previous_book_appendix_number",
-   "fieldtype": "Int",
-   "label": "Previous Appendix"
-  },
-  {
    "fieldname": "pedigree_tab",
    "fieldtype": "Tab Break",
    "label": "Pedigree"
-  },
-  {
-   "fieldname": "sec_parents",
-   "fieldtype": "Section Break",
-   "label": "Parents"
-  },
-  {
-   "description": "StudLib <code>father_id</code>.",
-   "fieldname": "sire",
-   "fieldtype": "Link",
-   "label": "Sire",
-   "options": "Horse"
-  },
-  {
-   "fieldname": "col_dam_link",
-   "fieldtype": "Column Break"
-  },
-  {
-   "description": "StudLib <code>mother_id</code>.",
-   "fieldname": "dam",
-   "fieldtype": "Link",
-   "label": "Dam",
-   "options": "Horse"
   },
   {
    "fieldname": "sec_sire",
@@ -546,54 +332,13 @@
    "label": "Sire's Data"
   },
   {
-   "fieldname": "sire_name_ar",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Sire's Name (Arabic)"
-  },
-  {
    "fieldname": "sire_name_en",
    "fieldtype": "Data",
    "label": "Sire's Name (English)"
   },
   {
-   "fieldname": "sire_registration_no",
-   "fieldtype": "Data",
-   "label": "Registration No"
-  },
-  {
    "fieldname": "col_sire_origin",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "sire_origin",
-   "fieldtype": "Select",
-   "label": "Country of Origin",
-   "options": "\nLocal\nImported"
-  },
-  {
-   "fieldname": "sire_date_of_birth",
-   "fieldtype": "Date",
-   "label": "Date of Birth"
-  },
-  {
-   "fieldname": "sire_place_of_birth",
-   "fieldtype": "Data",
-   "label": "Place of Birth"
-  },
-  {
-   "fieldname": "col_sire_description",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "sire_color",
-   "fieldtype": "Data",
-   "label": "Color"
-  },
-  {
-   "fieldname": "sire_breed",
-   "fieldtype": "Data",
-   "label": "Breed"
   },
   {
    "fieldname": "sire_microchip_no",
@@ -606,54 +351,13 @@
    "label": "Dam's Data"
   },
   {
-   "fieldname": "dam_name_ar",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Dam's Name (Arabic)"
-  },
-  {
    "fieldname": "dam_name_en",
    "fieldtype": "Data",
    "label": "Dam's Name (English)"
   },
   {
-   "fieldname": "dam_registration_no",
-   "fieldtype": "Data",
-   "label": "Registration No"
-  },
-  {
    "fieldname": "col_dam_origin",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "dam_origin",
-   "fieldtype": "Select",
-   "label": "Country of Origin",
-   "options": "\nLocal\nImported"
-  },
-  {
-   "fieldname": "dam_date_of_birth",
-   "fieldtype": "Date",
-   "label": "Date of Birth"
-  },
-  {
-   "fieldname": "dam_place_of_birth",
-   "fieldtype": "Data",
-   "label": "Place of Birth"
-  },
-  {
-   "fieldname": "col_dam_description",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "dam_color",
-   "fieldtype": "Data",
-   "label": "Color"
-  },
-  {
-   "fieldname": "dam_breed",
-   "fieldtype": "Data",
-   "label": "Breed"
   },
   {
    "fieldname": "dam_microchip_no",
@@ -706,11 +410,6 @@
    "label": "Owner Name (English)"
   },
   {
-   "fieldname": "owner_national_id",
-   "fieldtype": "Data",
-   "label": "Owner National ID / Passport No"
-  },
-  {
    "fieldname": "col_owner_contact",
    "fieldtype": "Column Break"
   },
@@ -723,16 +422,6 @@
    "fieldname": "owner_city",
    "fieldtype": "Data",
    "label": "Owner City"
-  },
-  {
-   "fieldname": "owner_address",
-   "fieldtype": "Small Text",
-   "label": "Owner Address"
-  },
-  {
-   "fieldname": "owner_since",
-   "fieldtype": "Date",
-   "label": "Owner Since"
   },
   {
    "fieldname": "sec_breeder",
@@ -751,11 +440,6 @@
    "label": "Breeder Name (English)"
   },
   {
-   "fieldname": "breeder_national_id",
-   "fieldtype": "Data",
-   "label": "Breeder National ID / Passport No"
-  },
-  {
    "fieldname": "col_breeder_contact",
    "fieldtype": "Column Break"
   },
@@ -768,11 +452,6 @@
    "fieldname": "breeder_city",
    "fieldtype": "Data",
    "label": "Breeder City"
-  },
-  {
-   "fieldname": "breeder_address",
-   "fieldtype": "Small Text",
-   "label": "Breeder Address"
   },
   {
    "fieldname": "sec_history",
@@ -796,7 +475,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-21 10:00:00.000000",
+ "modified": "2026-10-03 01:34:50.978773",
  "modified_by": "Administrator",
  "module": "HMS",
  "name": "Horse",

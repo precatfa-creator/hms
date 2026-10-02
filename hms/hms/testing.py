@@ -72,7 +72,7 @@ def add_document(horse, category, **kwargs):
 		"doctype": "Horse Document",
 		"horse": horse.name if hasattr(horse, "name") else horse,
 		"category": category,
-		"attachment": "/files/test.pdf",
+		"attachments": [{"file": "/files/test.pdf"}],
 	}
 	rules = documents.get_category(category) or {}
 	for flag, field in documents.COMPANIONS.items():

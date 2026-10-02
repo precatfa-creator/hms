@@ -40,7 +40,7 @@ class TestHorseEvent(FrappeTestCase):
 		event.reload()
 
 		self.assertEqual(event.notification_status, "Processed")
-		self.assertEqual(made["form"], event.created_form)
+		self.assertEqual(made["form"], ("Owner Change Form", event.created_form))
 		self.assertEqual(event.created_form_type, "Owner Change Form")
 
 		form = frappe.get_doc("Owner Change Form", event.created_form)

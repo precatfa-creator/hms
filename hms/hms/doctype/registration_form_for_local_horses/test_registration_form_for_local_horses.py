@@ -44,7 +44,7 @@ class TestRegistrationFormforLocalHorses(FrappeTestCase):
 
 		document = frappe.get_doc({
 			"doctype": "Horse Document", "horse": horse.name,
-			"category": "Registration Form", "attachment": "/files/test.pdf",
+			"category": "Registration Form", "attachments": [{"file": "/files/test.pdf"}],
 			"document_date": "2026-01-01",
 		}).insert()
 		self.assertEqual(document.horse, horse.name)

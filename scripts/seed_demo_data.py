@@ -108,7 +108,7 @@ def add_documents(horse, coverage, files, rng):
 			"doctype": "Horse Document",
 			"horse": horse.name,
 			"category": category["category"],
-			"attachment": rng.choice(files),
+			"attachments": [{"file": rng.choice(files)}],
 		}
 		if category.get("needs_document_date"):
 			row["document_date"] = f"202{rng.randint(3, 6)}-0{rng.randint(1, 9)}-1{rng.randint(0, 8)}"
@@ -127,7 +127,7 @@ def add_documents(horse, coverage, files, rng):
 		# an optional document on top, which must not move the status
 		frappe.get_doc({
 			"doctype": "Horse Document", "horse": horse.name, "category": "Others",
-			"attachment": rng.choice(files), "notes": "صورة من ملف الجواد",
+			"attachments": [{"file": rng.choice(files)}], "notes": "صورة من ملف الجواد",
 		}).insert()
 
 	horse.reload()

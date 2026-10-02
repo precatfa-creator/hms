@@ -56,7 +56,8 @@ def is_applicable(category, horse):
 		return False
 
 	breed = category.get("applies_to_breed") or "All"
-	if breed != "All" and horse.get("breed") != breed:
+	# every horse here is a Thoroughbred; the Horse has no breed field
+	if breed != "All" and (horse.get("breed") or "Thoroughbred") != breed:
 		return False
 
 	country = category.get("applies_to_country")
@@ -77,7 +78,7 @@ def is_required(category, horse):
 
 def document_is_complete(document, category):
 	"""An attachment on its own is not a document. The details come with it."""
-	if not document.get("attachment"):
+	if not any(row.get("file") for row in document.get("attachments") or []):
 		return False
 	return all(
 		document.get(field)
@@ -153,7 +154,7 @@ def recalculate(horse_name):
 	if not horse_name or not frappe.db.exists("Horse", horse_name):
 		return
 	horse = frappe.db.get_value("Horse", horse_name,
-	                            ["origin", "gender", "breed", "birthplace_country",
+	                            ["origin", "gender", "birthplace_country",
 	                             "documents_status"], as_dict=True)
 	status = compute_status(horse, get_categories(), complete_categories_for(horse_name))
 	if status != horse.documents_status:
@@ -209,9 +210,9 @@ def _self_check():
 	# completeness
 	reg = names["Registration Form"]
 	assert not document_is_complete({}, reg), "no attachment, no document"
-	assert not document_is_complete({"attachment": "/files/a.pdf"}, reg), \
+	assert not document_is_complete({"attachments": [{"file": "/files/a.pdf"}]}, reg), \
 		"attachment without its date is not done"
-	assert document_is_complete({"attachment": "/files/a.pdf",
+	assert document_is_complete({"attachments": [{"file": "/files/a.pdf"}],
 	                             "document_date": "2026-01-01"}, reg)
 
 	# status

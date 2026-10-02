@@ -126,7 +126,7 @@ class TestCompleteness(unittest.TestCase):
 	def test_attachment_alone_is_not_a_document(self):
 		reg = BY_NAME["Registration Form"]
 		self.assertFalse(document_is_complete({}, reg))
-		self.assertFalse(document_is_complete({"attachment": "/files/a.pdf"}, reg))
+		self.assertFalse(document_is_complete({"attachments": [{"file": "/files/a.pdf"}]}, reg))
 
 	def test_companion_without_attachment_is_incomplete(self):
 		reg = BY_NAME["Registration Form"]
@@ -134,14 +134,14 @@ class TestCompleteness(unittest.TestCase):
 
 	def test_every_companion_counts(self):
 		marking = BY_NAME["Marking"]
-		document = {"attachment": "/files/a.pdf", "reference_no": "Dr. A"}
+		document = {"attachments": [{"file": "/files/a.pdf"}], "reference_no": "Dr. A"}
 		self.assertFalse(document_is_complete(document, marking))
 		document["document_date"] = "2026-01-01"
 		self.assertTrue(document_is_complete(document, marking))
 
 	def test_category_without_companions_needs_only_the_file(self):
 		plain = category("Plain")
-		self.assertTrue(document_is_complete({"attachment": "/files/a.pdf"}, plain))
+		self.assertTrue(document_is_complete({"attachments": [{"file": "/files/a.pdf"}]}, plain))
 
 
 class TestStatus(unittest.TestCase):

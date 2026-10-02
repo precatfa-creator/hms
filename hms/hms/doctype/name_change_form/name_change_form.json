@@ -104,11 +104,9 @@
    "read_only": 1
   },
   {
-   "fetch_from": "horse.place_of_birth",
    "fieldname": "place_of_birth",
    "fieldtype": "Data",
-   "label": "Place of Birth",
-   "read_only": 1
+   "label": "Place of Birth"
   },
   {
    "fieldname": "col_horse",
@@ -163,11 +161,9 @@
    "read_only": 1
   },
   {
-   "fetch_from": "horse.sire_registration_no",
    "fieldname": "sire_registration_no",
    "fieldtype": "Data",
-   "label": "Sire Registration No",
-   "read_only": 1
+   "label": "Sire Registration No"
   },
   {
    "fieldname": "col_pedigree",
@@ -181,11 +177,9 @@
    "read_only": 1
   },
   {
-   "fetch_from": "horse.dam_registration_no",
    "fieldname": "dam_registration_no",
    "fieldtype": "Data",
-   "label": "Dam Registration No",
-   "read_only": 1
+   "label": "Dam Registration No"
   },
   {
    "fieldname": "sec_owner",
@@ -207,18 +201,14 @@
    "read_only": 1
   },
   {
-   "fetch_from": "horse.owner_national_id",
    "fieldname": "owner_national_id",
    "fieldtype": "Data",
-   "label": "National ID / Passport No",
-   "read_only": 1
+   "label": "National ID / Passport No"
   },
   {
-   "fetch_from": "horse.owner_address",
    "fieldname": "owner_address",
    "fieldtype": "Small Text",
-   "label": "Address",
-   "read_only": 1
+   "label": "Address"
   },
   {
    "fieldname": "col_owner",
@@ -321,7 +311,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-21 10:00:00.000000",
+ "modified": "2026-10-03 10:00:00.000000",
  "modified_by": "Administrator",
  "module": "HMS",
  "name": "Name Change Form",

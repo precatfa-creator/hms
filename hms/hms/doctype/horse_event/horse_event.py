@@ -71,7 +71,7 @@ class HorseEvent(Document):
 			form = self.build_form(action["target_doctype"])
 			self.created_form_type = action["target_doctype"]
 			self.created_form = form.name
-			made["form"] = form.name
+			made["form"] = (action["target_doctype"], form.name)
 
 		if action.get("document_category") and not self.created_document:
 			document = frappe.get_doc({
@@ -86,7 +86,7 @@ class HorseEvent(Document):
 			document.flags.ignore_mandatory = True
 			document.insert(ignore_permissions=True)
 			self.created_document = document.name
-			made["document"] = document.name
+			made["document"] = ("Horse Document", document.name)
 
 		if not made:
 			frappe.throw(_("This event has already been processed."))

@@ -4,3 +4,4 @@
 
 [post_model_sync]
 hms.patches.v1_0.documents_to_transactions
+hms.patches.v1_0.attachment_to_table

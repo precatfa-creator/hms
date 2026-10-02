@@ -515,6 +515,15 @@ write_doctype(
 )
 
 write_doctype(
+    "Horse Document Attachment",
+    [
+        {"fieldname": "file", "fieldtype": "Attach", "label": "File", "reqd": 1,
+         "in_list_view": 1},
+    ],
+    istable=1,
+)
+
+write_doctype(
     "Horse Document",
     [
         series("HDOC-.YYYY.-.#####\n"),
@@ -522,17 +531,19 @@ write_doctype(
         link("horse", "Horse", "Horse", reqd=1, in_list_view=1, in_standard_filter=1),
         link("category", "Category", "Horse Document Category", reqd=1, in_list_view=1,
              in_standard_filter=1),
-        {"fieldname": "attachment", "fieldtype": "Attach", "label": "Attachment",
-         "reqd": 1, "in_list_view": 1},
         col("col_details"),
         # the five companion shapes every category in the mapping needs;
         # which of them show and which are required comes from the category.
         date("document_date", "Date", in_list_view=1),
         data("reference_no", "Reference Number"),
         select("doc_status", "Approval Status", "\nApproved\nDeclined"),
-        data("season", "Season"),
+        data("season", "Season", length=4, description="Year, e.g. 2026"),
         date("expiry_date", "Expiry Date"),
         {"fieldname": "notes", "fieldtype": "Small Text", "label": "Note"},
+
+        sec("sec_attachments", "Attachments"),
+        {"fieldname": "attachments", "fieldtype": "Table", "label": "Attachments",
+         "options": "Horse Document Attachment", "reqd": 1},
 
         sec("sec_source", "Source"),
         link("source_event", "From Event", "Horse Event", read_only=1, no_copy=1),
@@ -834,7 +845,7 @@ def horse_fetch_block():
         fetch("horse_name_ar", "Horse's Name (Arabic)", "horse.name_ar"),
         fetch("horse_name_en", "Horse's Name (English)", "horse.name_en"),
         fetch("date_of_birth", "Date of Birth", "horse.date_of_birth", "Date"),
-        fetch("place_of_birth", "Place of Birth", "horse.place_of_birth"),
+        data("place_of_birth", "Place of Birth"),
         col("col_horse"),
         fetch("gender", "Sex", "horse.gender"),
         fetch("color", "Color", "horse.color", "Link", "Horse Color"),
@@ -843,10 +854,10 @@ def horse_fetch_block():
         fetch("ueln_no", "UELN No", "horse.ueln_no"),
         sec("sec_pedigree", "Pedigree"),
         fetch("sire_name_en", "Sire's Name", "horse.sire_name_en"),
-        fetch("sire_registration_no", "Sire Registration No", "horse.sire_registration_no"),
+        data("sire_registration_no", "Sire Registration No"),
         col("col_pedigree"),
         fetch("dam_name_en", "Dam's Name", "horse.dam_name_en"),
-        fetch("dam_registration_no", "Dam Registration No", "horse.dam_registration_no"),
+        data("dam_registration_no", "Dam Registration No"),
     ]
 
 
@@ -859,11 +870,11 @@ ocf_fields = [
     sec("sec_transferor", "Transferor Information (Current Owner)"),
     fetch("current_owner_name_ar", "Full Name (Arabic)", "horse.owner_name_ar"),
     fetch("current_owner_name_en", "Full Name (English)", "horse.owner_name_en"),
-    fetch("current_owner_national_id", "National ID / Passport No", "horse.owner_national_id"),
-    fetch("current_owner_address", "Address", "horse.owner_address", "Small Text"),
+    data("current_owner_national_id", "National ID / Passport No"),
+    {"fieldname": "current_owner_address", "fieldtype": "Small Text", "label": "Address"},
     fetch("current_owner_city", "City", "horse.owner_city"),
     fetch("current_owner_phone", "Phone No", "horse.owner_phone"),
-    fetch("current_ownership_date", "Horse Ownership Date", "horse.owner_since", "Date"),
+    {"fieldname": "current_ownership_date", "fieldtype": "Date", "label": "Horse Ownership Date"},
     col("col_transferee"),
     {"fieldname": "new_owner_name_ar", "fieldtype": "Data", "label": "Full Name (Arabic)",
      "reqd": 1, "in_list_view": 1},
@@ -904,8 +915,8 @@ ncf_fields = [
     sec("sec_owner", "Owner"),
     fetch("owner_name_ar", "Owner's Name (Arabic)", "horse.owner_name_ar"),
     fetch("owner_name_en", "Owner's Name (English)", "horse.owner_name_en"),
-    fetch("owner_national_id", "National ID / Passport No", "horse.owner_national_id"),
-    fetch("owner_address", "Address", "horse.owner_address", "Small Text"),
+    data("owner_national_id", "National ID / Passport No"),
+    {"fieldname": "owner_address", "fieldtype": "Small Text", "label": "Address"},
     col("col_owner"),
     fetch("owner_city", "City", "horse.owner_city"),
     fetch("owner_phone", "Phone No", "horse.owner_phone"),
