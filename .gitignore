@@ -11,3 +11,6 @@ screenshots/parts/
 
 # Windows download metadata
 *:Zone.Identifier
+
+# large reference docs, kept out of the repo
+docs/*.pdf
